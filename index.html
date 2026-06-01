@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <style>
     :root {
       --bg: #0a0c10;
@@ -396,6 +397,39 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* Live Widget */
+    .live-section { margin-bottom: 24px; animation: fadeDown 0.6s 0.1s ease both; }
+    .live-table {
+      background: linear-gradient(145deg, var(--surface-light), var(--surface));
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    }
+    .live-row {
+      display: grid; grid-template-columns: 40px 1fr 60px; padding: 10px 16px;
+      align-items: center; border-bottom: 1px solid var(--border);
+    }
+    .live-row:last-child { border-bottom: none; }
+    .live-rank { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--muted); }
+    .live-manager { font-size: 13px; font-weight: 600; color: var(--text); }
+    .live-team { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+    .live-pts { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--fpl-cyan); text-align: right; }
+    .live-trend { font-size: 10px; margin-left: 4px; }
+    .trend-up { color: var(--accent); }
+    .trend-down { color: #f87171; }
+    .trend-flat { color: var(--muted); }
+
+    /* Action Button (Bragging Rights) */
+    .action-btn {
+      background: linear-gradient(135deg, rgba(105,56,239,0.2), rgba(56,239,125,0.2));
+      border: 1px solid var(--accent); color: var(--text);
+      padding: 10px 20px; border-radius: 30px; cursor: pointer;
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.05em; transition: all 0.2s ease; box-shadow: 0 0 15px rgba(56,239,125,0.1);
+    }
+    .action-btn:hover {
+      background: linear-gradient(135deg, rgba(105,56,239,0.4), rgba(56,239,125,0.4));
+      transform: translateY(-2px); box-shadow: 0 5px 20px rgba(56,239,125,0.3);
+    }
   </style>
   <script type="application/ld+json" id="json-ld"></script>
 </head>
@@ -414,6 +448,16 @@
 
     <div class="stats-bar" id="stats-bar" aria-label="League statistics"></div>
 
+    <section class="live-section" id="live-widget-section" aria-label="Current Season Live Standings">
+      <div class="section-header">
+        <h2 class="section-label">🔴 Live 26/27 Standings</h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="live-widget-content">
+        <div class="empty-note">Fetching live data from FPL HQ...</div>
+      </div>
+    </section>
+
     <section class="timeline-section" aria-label="Season timeline">
       <div class="section-header">
         <h2 class="section-label">Timeline</h2>
@@ -431,7 +475,15 @@
     </div>
 
     <section class="podium-section" id="podium-section" aria-label="Top three managers">
-      <div class="podium" id="podium"></div>
+      <div id="brag-container" style="padding: 20px; border-radius: 16px;">
+        <div class="podium" id="podium"></div>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <button type="button" class="action-btn" id="btn-share-podium">
+          📸 Share Podium to WhatsApp
+        </button>
+      </div>
     </section>
 
     <div class="table-wrap" id="standings-panel" role="tabpanel" aria-labelledby="tab-all">
@@ -1012,12 +1064,91 @@
       wrap.textContent = wrap.dataset.initials || '?';
     }, true);
 
+    // --- FEATURE: Live FPL Standings ---
+    async function loadLiveStandings() {
+      const container = document.getElementById('live-widget-content');
+      if (!LEAGUE_ID) {
+        container.innerHTML = '<div class="empty-note">Set LEAGUE_ID at the top of the script to see live standings.</div>';
+        return;
+      }
+
+      try {
+        const proxyUrl = `https://api.allorigins.win/raw?url=`;
+        const fplUrl = encodeURIComponent(`https://fantasy.premierleague.com/api/leagues-classic/${LEAGUE_ID}/standings/`);
+
+        const response = await fetch(proxyUrl + fplUrl);
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const data = await response.json();
+        const top5 = data.standings.results.slice(0, 5);
+
+        container.innerHTML = `
+          <div class="live-table">
+            ${top5.map(team => {
+              let trend = '<span class="live-trend trend-flat">−</span>';
+              if (team.last_rank < team.rank) trend = '<span class="live-trend trend-down">▼</span>';
+              if (team.last_rank > team.rank) trend = '<span class="live-trend trend-up">▲</span>';
+
+              return `
+                <div class="live-row">
+                  <div class="live-rank">${team.rank}${trend}</div>
+                  <div>
+                    <div class="live-manager">${escapeHtml(team.player_name)}</div>
+                    <div class="live-team">${escapeHtml(team.entry_name)}</div>
+                  </div>
+                  <div class="live-pts">${team.total}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      } catch (error) {
+        console.error("Error fetching live FPL data:", error);
+        container.innerHTML = '<div class="empty-note">Failed to load live standings. FPL API might be down or updating.</div>';
+      }
+    }
+
+    // --- FEATURE: Bragging Rights Generator ---
+    function setupBraggingRights() {
+      const btn = document.getElementById('btn-share-podium');
+
+      btn.addEventListener('click', () => {
+        const target = document.getElementById('brag-container');
+        const originalBg = target.style.background;
+
+        target.style.background = '#0a0c10';
+        btn.textContent = '📸 Generating...';
+
+        html2canvas(target, {
+          backgroundColor: '#0a0c10',
+          scale: 2,
+          useCORS: true
+        }).then(canvas => {
+          target.style.background = originalBg;
+          btn.textContent = '📸 Share Podium to WhatsApp';
+
+          const link = document.createElement('a');
+          link.download = 'abusement-park-podium.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        }).catch(err => {
+          console.error("Screenshot failed:", err);
+          btn.textContent = '❌ Failed';
+          target.style.background = originalBg;
+          setTimeout(() => btn.textContent = '📸 Share Podium to WhatsApp', 2000);
+        });
+      });
+    }
+
     function init() {
       setupFplLink();
       injectJsonLd();
       buildTimeline();
       buildHistory();
       setupStickyFilter();
+
+      loadLiveStandings();
+      setupBraggingRights();
 
       const allTimeStats = buildStats('all');
       renderNeverWon(allTimeStats.neverWon);
