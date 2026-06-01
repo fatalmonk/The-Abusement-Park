@@ -1124,8 +1124,6 @@
       const historyEl = document.getElementById('history');
       const latestYear = seasons[seasons.length - 1].year;
       seasons.map((s, idx) => ({ s, idx })).reverse().forEach(({ s, idx }) => {
-        const idx = seasons.indexOf(s);
-        const isCurrent = s.year === latestYear;
         const isCurrent = s.year === latestYear;
         const card = document.createElement('div');
         card.className = `history-card${isCurrent ? ' current-season' : ''}`;
