@@ -13,10 +13,10 @@ Founded in 2008, this league has hosted 18 seasons of high-stakes FPL management
 ## Setup for Contributors
 If you are an admin and need to update the league stats:
 
-1. **Update Data:** Edit the `seasons` array in `script.js` to add the most recent season.
-2. **Add Screenshots:** Save the final table image in the `/images` folder.
-3. **Link Images:** Update the `img` property in the `seasons` array to match your filename.
-4. **Deploy:** Simply push your changes to the `main` branch, and GitHub Pages will automatically update [fatalmonk.github.io/The-Abusement-Park/](https://fatalmonk.github.io/The-Abusement-Park/).
+1. **Update data:** Edit the `seasons` array at the bottom of `index.html` (search for `const seasons`).
+2. **Add screenshots:** Save the final table image in the `/images` folder. Filenames should match each season’s `img` path (e.g. `images/2026.png` for 2025/26).
+3. **Required images:** Each season entry needs a PNG at its `img` path. Currently in the repo: `2016`, `2018`, `2020`, `2022`–`2026`, and `fpllogo.png`. Add any missing years so archive cards and the lightbox work.
+4. **Deploy:** Push to `main` and GitHub Pages will update [theabusementpark.com](https://theabusementpark.com/).
 
 ## License
 This project is licensed under the MIT License.

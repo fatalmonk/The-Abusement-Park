@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Abusement Park | FPL Mini League History</title>
+  <meta name="description" content="Hall of Fame for The Abusement Park FPL mini-league — 18 seasons of winners, stats, and season archives since 2008/09.">
+  <meta property="og:title" content="The Abusement Park | FPL Mini League History">
+  <meta property="og:description" content="18 seasons of suffering &amp; glory. All-time champions, filters, and season-by-season archive.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://theabusementpark.com/">
+  <meta property="og:image" content="https://theabusementpark.com/images/fpllogo.png">
+  <link rel="icon" href="images/fpllogo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
@@ -14,7 +21,6 @@
       --surface-light: #1a1f2e;
       --border: #1e2530;
       --accent: #38ef7d;
-      --accent2: #11998e;
       --gold: #f5c842;
       --silver: #b0b8c8;
       --bronze: #cd7f32;
@@ -41,6 +47,18 @@
     }
 
     .container { width: 100%; max-width: 800px; margin: 0 auto; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* ── Header ── */
     .header {
@@ -78,6 +96,7 @@
     .hall-of-fame {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(48px, 12vw, 96px);
+      font-weight: 400;
       color: var(--gold);
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -312,28 +331,6 @@
       flex-shrink: 0;
     }
 
-    .share-col {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 6px;
-    }
-
-    .share-bar {
-      height: 3px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--accent2), var(--accent));
-      min-width: 3px;
-      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    .share-pct {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
     /* ── Streak badge ── */
     .streak-badge {
       display: inline-block;
@@ -365,6 +362,7 @@
     .section-label {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 16px;
+      font-weight: 400;
       letter-spacing: 0.1em;
       color: var(--text);
       text-transform: uppercase;
@@ -471,6 +469,15 @@
 
     .modal.active { display: flex; animation: fadeIn 0.2s ease; }
 
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      max-width: 100%;
+      cursor: default;
+    }
+
     .modal img {
       max-width: 100%;
       max-height: calc(100vh - 80px);
@@ -480,12 +487,27 @@
       animation: scaleIn 0.3s ease;
     }
 
+    .modal-error {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      padding: 24px 32px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+    }
+
     .modal-close {
       position: absolute;
-      top: 20px; right: 24px;
+      top: 16px; right: 20px;
+      z-index: 1;
+      background: none;
+      border: none;
       font-size: 36px;
       color: var(--muted);
       line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
       transition: color 0.2s;
     }
 
@@ -494,7 +516,7 @@
     /* ── Responsive ── */
     @media (max-width: 480px) {
       .stats-bar { grid-template-columns: repeat(2, 1fr); }
-      .table-head, .row { grid-template-columns: 40px 1fr 60px 60px; padding: 10px 12px; }
+      .table-head, .row { grid-template-columns: 40px 1fr 60px; padding: 10px 12px; }
       .manager-name { font-size: 13px; }
       .avatar { width: 32px; height: 32px; font-size: 12px; }
       .wins-count { font-size: 18px; }
@@ -531,6 +553,14 @@
     .row:nth-child(7) { animation-delay: 0.77s; }
     .row:nth-child(8) { animation-delay: 0.84s; }
     .row:nth-child(9) { animation-delay: 0.91s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -538,7 +568,7 @@
     <header class="header">
       <h1 class="title">The Abusement Park</h1>
       <div class="league-tag">Fantasy Premier League</div>
-      <div class="hall-of-fame">Hall of Fame</div>
+      <h2 class="hall-of-fame">Hall of Fame</h2>
       <p class="subtitle">18 seasons of suffering &amp; glory · 2008/09 — 2025/26</p>
     </header>
 
@@ -547,12 +577,12 @@
     </div>
 
     <div class="filter-bar" role="tablist" aria-label="Filter standings">
-      <button class="filter-btn active" onclick="updateView('all', this)" role="tab" aria-selected="true">All Time</button>
-      <button class="filter-btn" onclick="updateView('last5', this)" role="tab" aria-selected="false">Last 5</button>
-      <button class="filter-btn" onclick="updateView('last10', this)" role="tab" aria-selected="false">Last 10</button>
+      <button type="button" id="tab-all" class="filter-btn active" data-mode="all" role="tab" aria-controls="standings-panel" aria-selected="true">All Time</button>
+      <button type="button" id="tab-last5" class="filter-btn" data-mode="last5" role="tab" aria-controls="standings-panel" aria-selected="false">Last 5</button>
+      <button type="button" id="tab-last10" class="filter-btn" data-mode="last10" role="tab" aria-controls="standings-panel" aria-selected="false">Last 10</button>
     </div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" id="standings-panel" role="tabpanel" aria-labelledby="tab-all">
       <div class="table-head">
         <div class="th">#</div>
         <div class="th">Manager</div>
@@ -563,19 +593,31 @@
 
     <section class="history-section">
       <div class="section-header">
-        <div class="section-label">Season Archive</div>
+        <h2 class="section-label">Season Archive</h2>
         <div class="section-line"></div>
       </div>
       <div class="history-grid" id="history"></div>
     </section>
   </div>
 
-  <div id="lightbox" class="modal" onclick="closeLightbox()" role="dialog" aria-label="Season screenshot" tabindex="-1">
-    <span class="modal-close" aria-label="Close">&times;</span>
-    <img id="lightbox-img" src="" alt="Final league table" loading="lazy">
+  <div id="lightbox" class="modal" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
+    <button type="button" class="modal-close" id="lightbox-close" aria-label="Close">&times;</button>
+    <div class="modal-content">
+      <p id="lightbox-title" class="sr-only">Season screenshot</p>
+      <img id="lightbox-img" src="" alt="">
+      <p id="lightbox-error" class="modal-error" hidden>Screenshot not available for this season yet.</p>
+    </div>
   </div>
 
   <script>
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
     const seasons = [
       { year: "2008/09", winner: "Mac Alvi",                   img: "images/2009.png" },
       { year: "2009/10", winner: "Mac Alvi",                   img: "images/2010.png" },
@@ -641,14 +683,17 @@
       // Unique champion count
       const uniqueChamps = Object.keys(tally).length;
 
-      // Update stats bar
+      const panel = document.getElementById('standings-panel');
+      panel.setAttribute('aria-labelledby', btn.id);
+
       const statsBar = document.getElementById('stats-bar');
-      const topTwo = sorted.slice(0, 2).map(([n, w]) => `<span style="color:var(--text)">${n.split(' ')[0]}</span> ${w}`).join(' · ');
+      const leader = sorted[0]?.[0]?.split(' ')[0] || '—';
+      const runner = sorted[1]?.[0]?.split(' ')[0] || '—';
       statsBar.innerHTML = `
         <div class="stat"><div class="stat-val">${total}</div><div class="stat-lbl">Seasons</div></div>
         <div class="stat"><div class="stat-val">${uniqueChamps}</div><div class="stat-lbl">Champions</div></div>
-        <div class="stat"><div class="stat-val">${sorted[0]?.[1] || 0}</div><div class="stat-lbl">${sorted[0]?.[0].split(' ')[0] || '—'} Titles</div></div>
-        <div class="stat"><div class="stat-val">${sorted[1]?.[1] || 0}</div><div class="stat-lbl">${sorted[1]?.[0].split(' ')[0] || '—'} Titles</div></div>
+        <div class="stat"><div class="stat-val">${sorted[0]?.[1] || 0}</div><div class="stat-lbl">${escapeHtml(leader)} Titles</div></div>
+        <div class="stat"><div class="stat-val">${sorted[1]?.[1] || 0}</div><div class="stat-lbl">${escapeHtml(runner)} Titles</div></div>
       `;
 
       // Build standings
@@ -657,9 +702,8 @@
 
       sorted.forEach(([name, wins], i) => {
         const [bg, fg] = avatarColor(name);
+        const safeName = escapeHtml(name);
         const initials  = name.split(' ').map(w=>w[0]).slice(0,2).join('');
-        const pct       = Math.round((wins / total) * 100);
-        const barWidth  = Math.max(4, Math.round((wins / sorted[0][1]) * 56));
         const wonYears  = data.filter(s => s.winner === name).map(s => s.year.slice(-2));
         const streak    = trailingStreak(data, name);
 
@@ -673,12 +717,12 @@
         row.className = `row ${rankClass}`;
         row.innerHTML = `
           <div class="rank-num">${i + 1}</div>
-          <div class="manager-col" title="${name}">
-            <div class="avatar" style="background:${bg};color:${fg}">${initials}</div>
+          <div class="manager-col" title="${safeName}">
+            <div class="avatar" style="background:${bg};color:${fg}">${escapeHtml(initials)}</div>
             <div>
-              <div class="manager-name">${name}${streakTag}</div>
+              <div class="manager-name">${safeName}${streakTag}</div>
               <div class="manager-titles">
-                ${wonYears.map(y => `<span class="season-badge">${y}</span>`).join('')}
+                ${wonYears.map(y => `<span class="season-badge">${escapeHtml(y)}</span>`).join('')}
               </div>
             </div>
           </div>
@@ -691,20 +735,63 @@
       });
     }
 
-    function openLightbox(imgSrc) {
+    let lightboxReturnFocus = null;
+
+    function openLightbox(imgSrc, seasonYear) {
       const modal = document.getElementById('lightbox');
-      document.getElementById('lightbox-img').src = imgSrc;
+      const img = document.getElementById('lightbox-img');
+      const err = document.getElementById('lightbox-error');
+      const title = document.getElementById('lightbox-title');
+
+      lightboxReturnFocus = document.activeElement;
+      title.textContent = `Final league table – ${seasonYear}`;
+      img.alt = `Final league table – ${seasonYear}`;
+      img.hidden = false;
+      err.hidden = true;
+
+      img.onload = () => {
+        img.hidden = false;
+        err.hidden = true;
+      };
+      img.onerror = () => {
+        img.hidden = true;
+        err.hidden = false;
+      };
+
+      img.src = '';
+      img.src = imgSrc;
+      modal.hidden = false;
       modal.classList.add('active');
-      modal.focus();
-      document.addEventListener('keydown', handleKeydown);
+      document.getElementById('lightbox-close').focus();
+      document.addEventListener('keydown', handleLightboxKeydown);
     }
 
     function closeLightbox() {
-      document.getElementById('lightbox').classList.remove('active');
-      document.removeEventListener('keydown', handleKeydown);
+      const modal = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      modal.classList.remove('active');
+      modal.hidden = true;
+      img.src = '';
+      img.onload = null;
+      img.onerror = null;
+      document.removeEventListener('keydown', handleLightboxKeydown);
+      if (lightboxReturnFocus?.focus) lightboxReturnFocus.focus();
+      lightboxReturnFocus = null;
     }
 
-    function handleKeydown(e) { if (e.key === 'Escape') closeLightbox(); }
+    function handleLightboxKeydown(e) {
+      if (e.key === 'Escape') closeLightbox();
+    }
+
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target.id === 'lightbox') closeLightbox();
+    });
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+
+    document.querySelector('.filter-bar').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (btn) updateView(btn.dataset.mode, btn);
+    });
 
     // Build history grid
     const historyEl  = document.getElementById('history');
@@ -714,18 +801,18 @@
       const isCurrent = s.year === latestYear;
       const card = document.createElement('div');
       card.className = `history-card${isCurrent ? ' current-season' : ''}`;
-      card.onclick   = () => openLightbox(s.img);
+      card.addEventListener('click', () => openLightbox(s.img, s.year));
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-label', `View ${s.year} standings won by ${s.winner}`);
       card.innerHTML = `
         <div class="trophy-icon" aria-hidden="true">🏆</div>
-        <div class="history-season">${s.year}</div>
-        <div class="history-winner">${s.winner.split(' ')[0]}</div>
+        <div class="history-season">${escapeHtml(s.year)}</div>
+        <div class="history-winner">${escapeHtml(s.winner.split(' ')[0])}</div>
         ${isCurrent ? '<div class="current-label">Latest</div>' : ''}
       `;
       card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(s.img); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(s.img, s.year); }
       });
       historyEl.appendChild(card);
     });
