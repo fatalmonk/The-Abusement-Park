@@ -822,7 +822,7 @@
       document.getElementById('stats-bar').innerHTML = `
         <div class="stat"><div class="stat-val">${stats.total}</div><div class="stat-lbl">Seasons</div></div>
         <div class="stat"><div class="stat-val">${stats.uniqueChamps}</div><div class="stat-lbl">Champions</div></div>
-        <div class="stat"><div class="stat-val">${escapeHtml(stats.latestWinner)}</div><div class="stat-lbl">Latest Winner</div></div>
+        <div class="stat"><div class="stat-val">${escapeHtml(stats.latestWinner)}</div><div class="stat-lbl">Reigning Champ</div></div>
         <div class="stat"><div class="stat-val">${stats.bestRun.len || 0}</div><div class="stat-lbl">${stats.bestRun.len > 1 ? escapeHtml(streakName) + ' Streak' : 'Best Run'}</div></div>
       `;
 
