@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Abusement Park — FPL Mini League</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Mono:wght@400;500&amp;family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0c10;
     --surface: #10141c;
+    --surface-light: #1a1f2e;
     --border: #1e2530;
     --accent: #38ef7d;
     --accent2: #11998e;
+    --accent-purple: #7c3aed;
     --gold: #f5c842;
     --silver: #b0b8c8;
     --bronze: #cd7f32;
     --text: #e8edf5;
     --muted: #5a6478;
     --danger: #ff4d6d;
+    --fpl-purple: #6938ef;
+    --fpl-cyan: #00ff87;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,95 +36,158 @@
     justify-content: center;
     padding: 40px 20px;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56,239,125,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(105,56,239,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(56,239,125,0.08) 0%, transparent 50%),
       repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(30,37,48,0.4) 39px, rgba(30,37,48,0.4) 40px),
       repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(30,37,48,0.2) 39px, rgba(30,37,48,0.2) 40px);
   }
 
   .container {
     width: 100%;
-    max-width: 720px;
+    max-width: 800px;
   }
 
-  /* Header */
+  /* FPL Logo Header */
   .header {
     text-align: center;
-    margin-bottom: 36px;
+    margin-bottom: 40px;
     animation: fadeDown 0.6s ease both;
+  }
+
+  .fpl-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .fpl-logo svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .fpl-logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.1em;
+    color: var(--text);
+  }
+
+  .fpl-logo-text span {
+    color: var(--accent);
   }
 
   .league-tag {
     display: inline-block;
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--fpl-cyan);
     text-transform: uppercase;
-    border: 1px solid rgba(56,239,125,0.3);
-    padding: 4px 14px;
-    border-radius: 2px;
+    border: 1px solid rgba(0,255,135,0.3);
+    padding: 6px 16px;
+    border-radius: 20px;
     margin-bottom: 16px;
-    background: rgba(56,239,125,0.04);
+    background: linear-gradient(135deg, rgba(0,255,135,0.08), rgba(105,56,239,0.08));
   }
 
   .title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 10vw, 80px);
-    letter-spacing: 0.04em;
+    font-size: clamp(52px, 12vw, 90px);
+    letter-spacing: 0.02em;
     line-height: 0.9;
-    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 60%, var(--accent2) 100%);
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 40%, var(--fpl-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 60px rgba(56,239,125,0.15);
   }
 
   .subtitle {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--muted);
-    font-style: italic;
     letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
   }
 
-  /* Stats bar */
+  .subtitle::before,
+  .subtitle::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* Stats bar - FPL style gradient cards */
   .stats-bar {
-    display: flex;
-    gap: 1px;
-    margin-bottom: 28px;
-    background: var(--border);
-    border-radius: 6px;
-    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
     animation: fadeUp 0.6s 0.2s ease both;
   }
 
   .stat {
-    flex: 1;
-    background: var(--surface);
-    padding: 14px 16px;
+    background: linear-gradient(145deg, var(--surface-light), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--fpl-purple));
+  }
+
+  .stat:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56,239,125,0.3);
   }
 
   .stat-val {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    color: var(--accent);
+    font-size: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--fpl-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     line-height: 1;
   }
 
   .stat-lbl {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    margin-top: 3px;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 600px) {
+    .stats-bar {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   /* Filter bar */
   .filter-bar {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 20px;
-    justify-content: flex-end;
+    justify-content: center;
     animation: fadeUp 0.6s 0.3s ease both;
   }
 
@@ -129,38 +195,48 @@
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--muted);
-    padding: 6px 12px;
-    border-radius: 4px;
+    padding: 8px 16px;
+    border-radius: 20px;
     cursor: pointer;
     font-family: 'DM Mono', monospace;
     font-size: 11px;
+    letter-spacing: 0.05em;
     transition: all 0.15s ease;
   }
 
-  .filter-btn:hover { border-color: rgba(56,239,125,0.4); color: var(--text); }
-  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56,239,125,0.05); }
+  .filter-btn:hover { 
+    border-color: rgba(56,239,125,0.4); 
+    color: var(--text); 
+  }
+  
+  .filter-btn.active { 
+    border-color: var(--accent); 
+    color: var(--accent); 
+    background: linear-gradient(135deg, rgba(56,239,125,0.1), rgba(105,56,239,0.1));
+    box-shadow: 0 0 20px rgba(56,239,125,0.1);
+  }
 
-  /* Table */
+  /* Table - FPL style cards */
   .table-wrap {
-    background: var(--surface);
+    background: linear-gradient(145deg, var(--surface-light), var(--surface));
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 16px;
     overflow: hidden;
     animation: fadeUp 0.6s 0.35s ease both;
   }
 
   .table-head {
     display: grid;
-    grid-template-columns: 48px 1fr 80px 80px;
-    padding: 10px 20px;
-    background: rgba(56,239,125,0.04);
+    grid-template-columns: 50px 1fr 80px 80px;
+    padding: 14px 20px;
+    background: linear-gradient(90deg, rgba(56,239,125,0.05), rgba(105,56,239,0.05));
     border-bottom: 1px solid var(--border);
   }
 
   .th {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     color: var(--muted);
     text-transform: uppercase;
   }
@@ -169,42 +245,58 @@
 
   .row {
     display: grid;
-    grid-template-columns: 48px 1fr 80px 80px;
+    grid-template-columns: 50px 1fr 80px 80px;
     padding: 0 20px;
     align-items: center;
     border-bottom: 1px solid var(--border);
-    min-height: 56px;
-    transition: background 0.15s ease;
+    min-height: 64px;
+    transition: all 0.15s ease;
     animation: rowIn 0.4s ease both;
   }
 
   .row:last-child { border-bottom: none; }
-  .row:hover { background: rgba(255,255,255,0.02); }
-
-  .row.rank-1 { background: rgba(245,200,66,0.05); }
-  .row.rank-2 { background: rgba(176,184,200,0.04); }
-  .row.rank-3 { background: rgba(205,127,50,0.04); }
-
-  .rank-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 500;
+  .row:hover { 
+    background: rgba(255,255,255,0.03);
+    transform: translateX(4px);
   }
 
-  .rank-1 .rank-num { color: var(--gold); }
+  .row.rank-1 { 
+    background: linear-gradient(90deg, rgba(245,200,66,0.08), transparent);
+    border-left: 3px solid var(--gold);
+  }
+  .row.rank-2 { 
+    background: linear-gradient(90deg, rgba(176,184,200,0.06), transparent);
+    border-left: 3px solid var(--silver);
+  }
+  .row.rank-3 { 
+    background: linear-gradient(90deg, rgba(205,127,50,0.06), transparent);
+    border-left: 3px solid var(--bronze);
+  }
+
+  .rank-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--muted);
+    font-weight: 500;
+    padding-left: 8px;
+  }
+
+  .rank-1 .rank-num { 
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(245,200,66,0.3);
+  }
   .rank-2 .rank-num { color: var(--silver); }
   .rank-3 .rank-num { color: var(--bronze); }
 
   .manager-col {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
 
   .avatar {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -212,31 +304,35 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 14px;
     flex-shrink: 0;
-    position: relative;
+    border: 2px solid var(--border);
+    transition: transform 0.2s;
+  }
+
+  .avatar:hover {
+    transform: scale(1.1);
   }
 
   .manager-name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--text);
   }
 
   .manager-titles {
     display: flex;
-    gap: 3px;
-    margin-top: 2px;
+    gap: 4px;
+    margin-top: 4px;
     flex-wrap: wrap;
   }
 
   .season-badge {
     font-family: 'DM Mono', monospace;
     font-size: 9px;
-    padding: 1px 5px;
-    border-radius: 2px;
-    color: var(--gold);
-    border: 1px solid rgba(245,200,66,0.3);
-    background: rgba(245,200,66,0.06);
-    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+    border: 1px solid rgba(56,239,125,0.25);
+    background: rgba(56,239,125,0.06);
   }
 
   .wins-col {
@@ -245,15 +341,15 @@
 
   .wins-count {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
+    font-size: 24px;
     line-height: 1;
   }
 
   .wins-col .trophy-row {
     display: flex;
     justify-content: center;
-    gap: 2px;
-    margin-top: 3px;
+    gap: 3px;
+    margin-top: 4px;
     flex-wrap: wrap;
     max-width: 70px;
     margin-left: auto;
@@ -261,11 +357,11 @@
   }
 
   .trophy-dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: var(--gold);
-    opacity: 0.7;
+    background: linear-gradient(135deg, var(--gold), #ff9500);
+    opacity: 0.9;
   }
 
   .share-col {
@@ -275,7 +371,7 @@
   .share-bar-wrap {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     justify-content: flex-end;
   }
 
@@ -296,58 +392,91 @@
 
   /* History section */
   .history-section {
-    margin-top: 28px;
+    margin-top: 32px;
     animation: fadeUp 0.6s 0.5s ease both;
   }
 
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 12px;
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
     padding-left: 4px;
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
   }
 
   .history-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
   }
 
   .history-card {
-    background: var(--surface);
+    background: linear-gradient(145deg, var(--surface-light), var(--surface));
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 14px;
+    border-radius: 12px;
+    padding: 14px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    transition: border-color 0.15s, transform 0.15s;
+    gap: 8px;
+    transition: all 0.2s ease;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
   }
 
-  .history-card:hover { border-color: rgba(56,239,125,0.4); transform: translateY(-2px); }
+  .history-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .history-card:hover { 
+    border-color: rgba(56,239,125,0.4); 
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  .history-card:hover::before {
+    opacity: 1;
+  }
+
+  .history-card .trophy-icon {
+    font-size: 28px;
+    filter: drop-shadow(0 0 8px rgba(245,200,66,0.4));
+  }
 
   .history-season {
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     color: var(--muted);
-    line-height: 1;
-    white-space: nowrap;
   }
 
   .history-winner {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text);
-    line-height: 1.2;
-  }
-
-  .trophy-icon {
-    font-size: 16px;
-    flex-shrink: 0;
+    text-align: center;
   }
 
   /* Modal/Lightbox */
@@ -364,6 +493,7 @@
     justify-content: center;
     cursor: pointer;
     animation: fadeIn 0.2s ease;
+    backdrop-filter: blur(8px);
   }
 
   .modal.active {
@@ -373,10 +503,24 @@
   .modal img {
     max-width: 90%;
     max-height: 80vh;
-    border-radius: 4px;
+    border-radius: 12px;
     border: 1px solid var(--border);
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     animation: scaleIn 0.3s ease;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 32px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover {
+    color: var(--text);
   }
 
   /* Keyframes */
@@ -413,9 +557,9 @@
   .row:nth-child(10) { animation-delay: 1.03s; }
 
   @media (max-width: 520px) {
-    .table-head, .row { grid-template-columns: 36px 1fr 60px 70px; padding: 0 12px; }
+    .table-head, .row { grid-template-columns: 40px 1fr 60px 70px; padding: 0 12px; }
     .history-grid { grid-template-columns: repeat(2, 1fr); }
-    .stats-bar { flex-direction: row; }
+    .avatar { width: 36px; height: 36px; }
   }
 </style>
 </head>
@@ -423,9 +567,24 @@
 <div class="container">
 
   <div class="header">
-    <div class="league-tag">Fantasy Premier League · Mini League</div>
-    <div class="title">The Abusement Park</div>
-    <div class="subtitle">18 seasons of suffering &amp; glory · 2008/09 — 2025/26</div>
+    <div class="fpl-logo">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="12" fill="url(#grad1)"/>
+        <path d="M24 8L30 14L24 20L18 14L24 8Z" fill="white"/>
+        <path d="M24 20L30 26L24 32L18 26L24 20Z" fill="white" opacity="0.7"/>
+        <path d="M24 32L30 38L24 44L18 38L24 32Z" fill="white" opacity="0.4"/>
+        <defs>
+          <linearGradient id="grad1" x1="0" y1="0" x2="48" y2="48">
+            <stop offset="0%" stop-color="#38ef7d"/>
+            <stop offset="100%" stop-color="#6938ef"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="fpl-logo-text">FANTASY <span>PREMIER LEAGUE</span></div>
+    </div>
+    <div class="league-tag">The Abusement Park · Mini League</div>
+    <div class="title">HALL OF FAME</div>
+    <div class="subtitle">18 Seasons · 2008/09 — 2025/26</div>
   </div>
 
   <div class="stats-bar">
@@ -439,11 +598,11 @@
     </div>
     <div class="stat">
       <div class="stat-val">5</div>
-      <div class="stat-lbl">Mac's Titles</div>
+      <div class="stat-lbl">Mac</div>
     </div>
     <div class="stat">
       <div class="stat-val">5</div>
-      <div class="stat-lbl">Abrar's Titles</div>
+      <div class="stat-lbl">Abrar</div>
     </div>
   </div>
 
@@ -464,14 +623,17 @@
   </div>
 
   <div class="history-section">
-    <div class="section-label">Season by Season</div>
+    <div class="section-header">
+      <div class="section-label">Season Archive</div>
+      <div class="section-line"></div>
+    </div>
     <div class="history-grid" id="history"></div>
   </div>
 
 </div>
 
-<!-- Lightbox Modal -->
 <div id="lightbox" class="modal" onclick="closeLightbox()">
+  <div class="modal-close">&times;</div>
   <img id="lightbox-img" src="" alt="Season Table">
 </div>
 
@@ -511,13 +673,11 @@ function updateView(mode, btn) {
   if (mode === 'last5') data = seasons.slice(-5);
   if (mode === 'last10') data = seasons.slice(-10);
 
-  // Tally wins for selected range
   const tally = {};
   data.forEach(s => { tally[s.winner] = (tally[s.winner] || 0) + 1; });
   const sorted = Object.entries(tally).sort((a,b) => b[1]-a[1]);
   const total = data.length;
 
-  // Build standings
   const standingsEl = document.getElementById('standings');
   standingsEl.innerHTML = '';
 
@@ -526,8 +686,6 @@ function updateView(mode, btn) {
     const initials = name.split(' ').map(w=>w[0]).slice(0,2).join('');
     const pct = Math.round((wins/total)*100);
     const barWidth = Math.max(4, Math.round((wins/sorted[0][1])*56));
-
-    // Get seasons won
     const wonSeasons = data.filter(s => s.winner === name).map(s => s.year.slice(-2));
 
     const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
@@ -570,7 +728,6 @@ function closeLightbox() {
   document.getElementById('lightbox').classList.remove('active');
 }
 
-// Build history
 const historyEl = document.getElementById('history');
 [...seasons].reverse().forEach(s => {
   const card = document.createElement('div');
@@ -578,15 +735,12 @@ const historyEl = document.getElementById('history');
   card.onclick = () => openLightbox(s.img);
   card.innerHTML = `
     <div class="trophy-icon">🏆</div>
-    <div>
-      <div class="history-season">${s.year}</div>
-      <div class="history-winner">${s.winner.split(' ')[0]}</div>
-    </div>
+    <div class="history-season">${s.year}</div>
+    <div class="history-winner">${s.winner.split(' ')[0]}</div>
   `;
   historyEl.appendChild(card);
 });
 
-// Init
 updateView('all', document.querySelector('.filter-btn'));
 </script>
 </body>
