@@ -468,12 +468,20 @@
       <div class="mini-grid" id="droughts"></div>
     </section>
 
+    <section class="side-section" aria-label="Positive awards">
+      <div class="section-header">
+        <h2 class="section-label">Wall of Fame</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="awards-grid" id="awards-fame"></div>
+    </section>
+
     <section class="side-section" aria-label="Fun awards">
       <div class="section-header">
         <h2 class="section-label">Wall of Shame</h2>
         <div class="section-line"></div>
       </div>
-      <div class="awards-grid" id="awards"></div>
+      <div class="awards-grid" id="awards-shame"></div>
     </section>
 
     <section class="history-section">
@@ -647,29 +655,30 @@
       const dynasty = Object.entries(allTimeTally).sort((a, b) => b[1] - a[1])[0];
       const hotStreak = longestEverStreak();
 
-      const awards = [
-        { emoji: '👑', title: 'Dynasty', winner: dynasty[0], detail: `${dynasty[1]} titles all-time` },
-        { emoji: '🔥', title: 'Hot Streak', winner: hotStreak.name, detail: `${hotStreak.len} seasons in a row` },
-        {
-          emoji: '🎯', title: 'One-Hit Wonders',
-          winner: oneHitWonders.length ? oneHitWonders.slice(0, 2).join(', ') : '—',
-          detail: oneHitWonders.length > 2 ? `+${oneHitWonders.length - 2} more` : 'Exactly 1 title',
-        },
-      ];
+      const awardsFame = [
+            { emoji: '👑', title: 'Dynasty', winner: dynasty[0], detail: `${dynasty[1]} titles all-time` },
+            { emoji: '🔥', title: 'Hot Streak', winner: hotStreak.name, detail: `${hotStreak.len} seasons in a row` },
+            {
+              emoji: '🎯', title: 'One-Hit Wonders',
+              winner: oneHitWonders.length ? oneHitWonders.slice(0, 2).join(', ') : '—',
+              detail: oneHitWonders.length > 2 ? `+${oneHitWonders.length - 2} more` : 'Exactly 1 title',
+            },
+          ];
 
-      if (bottleWinner) {
-        awards.push({ emoji: '🍾', title: 'Bottle', winner: bottleWinner[0], detail: `${bottleWinner[1]} runner-up finishes` });
-      } else {
-        awards.push({ emoji: '🍾', title: 'Bottle', winner: '—', detail: 'Add runnerUp to seasons data' });
-      }
+          const awardsShame = [];
+          if (bottleWinner) {
+            awardsShame.push({ emoji: '🍾', title: 'Bottle', winner: bottleWinner[0], detail: `${bottleWinner[1]} runner-up finishes` });
+          } else {
+            awardsShame.push({ emoji: '🍾', title: 'Bottle', winner: '—', detail: 'Add runnerUp to seasons data' });
+          }
 
-      if (neverWon.length) {
-        awards.push({
-          emoji: '🥄', title: 'Wooden Spoon Club',
-          winner: neverWon.map(m => m.name.split(' ')[0]).slice(0, 3).join(', '),
-          detail: `${neverWon.length} manager(s) titleless`,
-        });
-      }
+          if (neverWon.length) {
+            awardsShame.push({
+              emoji: '🥄', title: 'Wooden Spoon Club',
+              winner: neverWon.map(m => m.name.split(' ')[0]).slice(0, 3).join(', '),
+              detail: `${neverWon.length} manager(s) titleless`,
+            });
+          }
 
       const latest = data[data.length - 1];
       const latestWinner = latest ? latest.winner.split(' ')[0] : '—';
@@ -686,7 +695,7 @@
       return {
         data, tally, sorted, total,
         uniqueChamps: Object.keys(tally).length,
-        neverWon, droughts, awards,
+        neverWon, droughts, awardsFame, awardsShame,
         latestWinner, bottleLeader,
       };
     }
@@ -774,8 +783,16 @@
       `).join('');
     }
 
-    function renderAwards(awards) {
-      document.getElementById('awards').innerHTML = awards.map(a => `
+    function renderAwards(fame, shame) {
+      document.getElementById('awards-fame').innerHTML = fame.map(a => `
+        <div class="award-card">
+          <div class="award-emoji">${a.emoji}</div>
+          <div class="award-title">${escapeHtml(a.title)}</div>
+          <div class="award-winner">${escapeHtml(a.winner)}</div>
+          <div class="award-detail">${escapeHtml(a.detail)}</div>
+        </div>
+      `).join('');
+      document.getElementById('awards-shame').innerHTML = shame.map(a => `
         <div class="award-card">
           <div class="award-emoji">${a.emoji}</div>
           <div class="award-title">${escapeHtml(a.title)}</div>
@@ -1005,7 +1022,7 @@
       const allTimeStats = buildStats('all');
       renderNeverWon(allTimeStats.neverWon);
       renderDroughts(allTimeStats.droughts);
-      renderAwards(allTimeStats.awards);
+      renderAwards(allTimeStats.awardsFame, allTimeStats.awardsShame);
 
       document.getElementById('lightbox').addEventListener('click', e => {
         if (e.target.id === 'lightbox') closeLightbox();
