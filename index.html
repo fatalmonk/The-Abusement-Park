@@ -65,14 +65,24 @@
 
     .title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(56px, 14vw, 120px);
+      font-size: clamp(40px, 10vw, 72px);
       letter-spacing: 0.02em;
       line-height: 0.95;
       background: linear-gradient(135deg, #ffffff 0%, var(--accent) 40%, var(--fpl-purple) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+    }
+
+    .hall-of-fame {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 12vw, 96px);
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 4px 0 16px;
+      text-shadow: 0 0 40px rgba(245,200,66,0.5);
     }
 
     .hall-of-fame {
@@ -182,7 +192,7 @@
 
     .table-head {
       display: grid;
-      grid-template-columns: 50px 1fr 80px 70px;
+      grid-template-columns: 50px 1fr 80px;
       padding: 12px 16px;
       background: linear-gradient(90deg, rgba(56,239,125,0.05), rgba(105,56,239,0.05));
       border-bottom: 1px solid var(--border);
@@ -200,7 +210,7 @@
 
     .row {
       display: grid;
-      grid-template-columns: 50px 1fr 80px 70px;
+      grid-template-columns: 50px 1fr 80px;
       padding: 12px 16px;
       align-items: center;
       border-bottom: 1px solid var(--border);
@@ -526,8 +536,8 @@
 <body>
   <div class="container">
     <header class="header">
-      <div class="league-tag">Fantasy Premier League</div>
       <h1 class="title">The Abusement Park</h1>
+      <div class="league-tag">Fantasy Premier League</div>
       <div class="hall-of-fame">Hall of Fame</div>
       <p class="subtitle">18 seasons of suffering &amp; glory · 2008/09 — 2025/26</p>
     </header>
@@ -547,7 +557,6 @@
         <div class="th">#</div>
         <div class="th">Manager</div>
         <div class="th center">Titles</div>
-        <div class="th center">Share</div>
       </div>
       <div id="standings"></div>
     </div>
@@ -676,10 +685,6 @@
           <div class="wins-col">
             <div class="wins-count" style="color:${color}">${wins}</div>
             ${Array(wins).fill('<div class="trophy-dot"></div>').join('')}
-          </div>
-          <div class="share-col">
-            <div class="share-bar" style="width:${barWidth}px"></div>
-            <span class="share-pct">${pct}%</span>
           </div>
         `;
         standingsEl.appendChild(row);
