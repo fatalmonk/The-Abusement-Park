@@ -256,21 +256,15 @@
 
     /* Charts */
     .charts-section { margin-bottom: 32px; }
-    .charts-grid {
-      display: grid; grid-template-columns: 1fr; gap: 16px;
-    }
-    @media (min-width: 640px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
     .chart-card {
       background: linear-gradient(145deg, var(--surface-light), var(--surface));
       border: 1px solid var(--border); border-radius: 14px; padding: 16px;
     }
-    .chart-card.wide { grid-column: 1 / -1; }
     .chart-title {
       font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
       color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
     }
-    .chart-wrap { position: relative; height: 220px; }
-    .chart-card.wide .chart-wrap { height: 200px; }
+    .chart-wrap { position: relative; height: 240px; }
 
     /* Never won / drought */
     .side-section { margin-bottom: 32px; animation: fadeUp 0.6s 0.4s ease both; }
@@ -454,19 +448,9 @@
         <h2 class="section-label">Stats</h2>
         <div class="section-line"></div>
       </div>
-      <div class="charts-grid">
-        <div class="chart-card">
-          <div class="chart-title">Titles in view</div>
-          <div class="chart-wrap"><canvas id="chart-titles" aria-label="Titles per manager"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">Unique champions per 5 seasons</div>
-          <div class="chart-wrap"><canvas id="chart-buckets" aria-label="Unique champions per five seasons"></canvas></div>
-        </div>
-        <div class="chart-card wide">
-          <div class="chart-title">Cumulative titles — all-time top 3</div>
-          <div class="chart-wrap"><canvas id="chart-cumulative" aria-label="Cumulative titles over time"></canvas></div>
-        </div>
+      <div class="chart-card">
+        <div class="chart-title">Cumulative titles — all-time top 3</div>
+        <div class="chart-wrap"><canvas id="chart-cumulative" aria-label="Cumulative titles over time"></canvas></div>
       </div>
     </section>
 
@@ -555,7 +539,7 @@
     let colorIdx = 0;
     let lightboxIndex = 0;
     let lightboxReturnFocus = null;
-    let chartTitles, chartBuckets, chartCumulative;
+    let chartCumulative;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Build managers roster from winners + extras
@@ -689,13 +673,6 @@
         });
       }
 
-      const buckets = [];
-      for (let i = 0; i < seasons.length; i += 5) {
-        const slice = seasons.slice(i, i + 5);
-        const label = slice[0].year.split('/')[0] + '–' + slice[slice.length - 1].year.slice(-2);
-        buckets.push({ label, unique: new Set(slice.map(s => s.winner)).size });
-      }
-
       const latest = data[data.length - 1];
       const latestWinner = latest ? latest.winner.split(' ')[0] : '—';
 
@@ -712,12 +689,12 @@
       return {
         data, tally, sorted, total,
         uniqueChamps: Object.keys(tally).length,
-        neverWon, droughts, awards, buckets,
+        neverWon, droughts, awards,
         latestWinner, bestRun,
       };
     }
 
-    function updateCharts(stats) {
+    function updateCharts() {
       if (typeof Chart === 'undefined') return;
 
       const chartDefaults = {
@@ -730,27 +707,6 @@
           y: { ticks: { color: '#5a6478', font: { size: 10 } }, grid: { color: 'rgba(30,37,48,0.6)' } },
         },
       };
-
-      const labels = stats.sorted.map(([n]) => n.split(' ')[0]);
-      const values = stats.sorted.map(([, w]) => w);
-      const colors = stats.sorted.map(([n]) => avatarColor(n)[0]);
-
-      if (chartTitles) chartTitles.destroy();
-      chartTitles = new Chart(document.getElementById('chart-titles'), {
-        type: 'bar',
-        data: { labels, datasets: [{ data: values, backgroundColor: colors, borderRadius: 6 }] },
-        options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } },
-      });
-
-      if (chartBuckets) chartBuckets.destroy();
-      chartBuckets = new Chart(document.getElementById('chart-buckets'), {
-        type: 'bar',
-        data: {
-          labels: stats.buckets.map(b => b.label),
-          datasets: [{ data: stats.buckets.map(b => b.unique), backgroundColor: '#6938ef', borderRadius: 6 }],
-        },
-        options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } },
-      });
 
       const top3 = Object.entries(
         seasons.reduce((acc, s) => { acc[s.winner] = (acc[s.winner] || 0) + 1; return acc; }, {})
@@ -871,7 +827,7 @@
       `;
 
       renderPodium(stats.sorted);
-      updateCharts(stats);
+      updateCharts();
 
       const standingsEl = document.getElementById('standings');
       standingsEl.innerHTML = '';
