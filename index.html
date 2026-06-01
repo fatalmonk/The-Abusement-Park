@@ -696,7 +696,25 @@
         buckets.push({ label, unique: new Set(slice.map(s => s.winner)).size });
       }
 
-      return { data, tally, sorted, total, uniqueChamps: Object.keys(tally).length, neverWon, droughts, awards, buckets };
+      const latest = data[data.length - 1];
+      const latestWinner = latest ? latest.winner.split(' ')[0] : '—';
+
+      let bestRun = { len: 0, name: '' };
+      [...new Set(data.map(s => s.winner))].forEach(name => {
+        let cur = 0, max = 0;
+        data.forEach(s => {
+          if (s.winner === name) { cur++; max = Math.max(max, cur); }
+          else cur = 0;
+        });
+        if (max > bestRun.len) bestRun = { len: max, name };
+      });
+
+      return {
+        data, tally, sorted, total,
+        uniqueChamps: Object.keys(tally).length,
+        neverWon, droughts, awards, buckets,
+        latestWinner, bestRun,
+      };
     }
 
     function updateCharts(stats) {
@@ -844,13 +862,12 @@
       const stats = buildStats(mode);
       document.getElementById('standings-panel').setAttribute('aria-labelledby', btn.id);
 
-      const leader = stats.sorted[0]?.[0]?.split(' ')[0] || '—';
-      const runner = stats.sorted[1]?.[0]?.split(' ')[0] || '—';
+      const streakName = stats.bestRun.name ? stats.bestRun.name.split(' ')[0] : '—';
       document.getElementById('stats-bar').innerHTML = `
         <div class="stat"><div class="stat-val">${stats.total}</div><div class="stat-lbl">Seasons</div></div>
         <div class="stat"><div class="stat-val">${stats.uniqueChamps}</div><div class="stat-lbl">Champions</div></div>
-        <div class="stat"><div class="stat-val">${stats.sorted[0]?.[1] || 0}</div><div class="stat-lbl">${escapeHtml(leader)} Titles</div></div>
-        <div class="stat"><div class="stat-val">${stats.sorted[1]?.[1] || 0}</div><div class="stat-lbl">${escapeHtml(runner)} Titles</div></div>
+        <div class="stat"><div class="stat-val">${escapeHtml(stats.latestWinner)}</div><div class="stat-lbl">Latest Winner</div></div>
+        <div class="stat"><div class="stat-val">${stats.bestRun.len || 0}</div><div class="stat-lbl">${stats.bestRun.len > 1 ? escapeHtml(streakName) + ' Streak' : 'Best Run'}</div></div>
       `;
 
       renderPodium(stats.sorted);
