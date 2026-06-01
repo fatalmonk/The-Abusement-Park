@@ -13,7 +13,7 @@
   <link rel="icon" href="images/fpllogo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <style>
@@ -69,7 +69,7 @@
     .fpl-link {
       display: inline-flex; align-items: center; gap: 8px;
       margin-bottom: 16px; padding: 8px 14px;
-      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
       color: var(--teal); text-decoration: none;
       border: 1px solid rgba(100,255,218,0.25); border-radius: 20px;
       background: rgba(100,255,218,0.05); transition: border-color 0.2s, background 0.2s;
@@ -78,7 +78,7 @@
     .fpl-link img { width: 20px; height: 20px; object-fit: contain; }
 
     .league-tag {
-      display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px;
+      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px;
       letter-spacing: 0.15em; color: var(--teal); text-transform: uppercase;
       border: 1px solid rgba(100,255,218,0.2); padding: 6px 16px; border-radius: 20px;
       margin-bottom: 8px; background: rgba(100,255,218,0.04);
@@ -126,6 +126,7 @@
     .stat-lbl {
       font-size: 9px; color: var(--muted); text-transform: uppercase;
       letter-spacing: 0.1em; margin-top: 4px;
+      font-feature-settings: "tnum";
     }
 
     /* Timeline */
@@ -145,7 +146,8 @@
     }
     .timeline-chip:hover { transform: translateY(-2px); border-color: rgba(56,239,125,0.5); }
     .timeline-chip .chip-year {
-      font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); margin-bottom: 4px;
+
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); margin-bottom: 4px;
     }
     .timeline-chip .chip-name {
         font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -167,7 +169,8 @@
     .filter-btn {
       background: var(--surface); border: 1px solid var(--border); color: var(--muted);
       padding: 8px 16px; border-radius: 20px; cursor: pointer;
-      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
+
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
       transition: all 0.15s ease;
     }
     .filter-btn:hover { border-color: rgba(56,239,125,0.4); color: var(--text); }
@@ -200,7 +203,8 @@
     .podium-card.place-2 .podium-titles { color: var(--silver); }
     .podium-card.place-3 .podium-titles { color: var(--bronze); }
     .podium-lbl {
-      font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted);
+
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted);
       text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px;
     }
 
@@ -216,7 +220,8 @@
       border-bottom: 1px solid var(--border);
     }
     .th {
-      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em;
+
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em;
       color: var(--muted); text-transform: uppercase;
     }
     .th.center { text-align: center; }
@@ -249,15 +254,17 @@
     }
     .manager-titles { display: flex; gap: 3px; margin-top: 2px; flex-wrap: wrap; }
     .season-badge {
-      font-family: 'DM Mono', monospace; font-size: 9px; padding: 1px 4px;
-      border-radius: 3px; color: var(--accent);
-      border: 1px solid rgba(56,239,125,0.25); background: rgba(56,239,125,0.06);
-    }
+          font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 1px 4px;
+          border-radius: 3px; color: var(--accent);
+          border: 1px solid rgba(56,239,125,0.25); background: rgba(56,239,125,0.06);
+          font-feature-settings: "tnum";
+        }
     .wins-col { display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .wins-trophies { display: flex; gap: 4px; flex-wrap: nowrap; font-size: 18px; }
     .wins-years { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; margin-top: 2px; }
     .streak-badge {
-      display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px;
+
+      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 9px;
       padding: 1px 6px; border-radius: 3px; color: var(--gold);
       border: 1px solid rgba(255,215,64,0.3); background: var(--gold-dim);
       margin-left: 4px; white-space: nowrap; vertical-align: middle;
@@ -270,7 +277,8 @@
       border: 1px solid var(--border); border-radius: 14px; padding: 16px;
     }
     .chart-title {
-      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
       color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
     }
     .chart-wrap { position: relative; height: 240px; }
@@ -286,7 +294,8 @@
     }
     .mini-card .mini-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
     .mini-card .mini-stat {
-      font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
+
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted);
     }
     .empty-note {
       font-size: 13px; color: var(--muted); font-style: italic; padding: 8px 0;
@@ -302,7 +311,8 @@
     }
     .award-emoji { font-size: 24px; margin-bottom: 6px; }
     .award-title {
-      font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em;
+
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em;
       color: var(--muted); text-transform: uppercase; margin-bottom: 4px;
     }
     .award-winner { font-size: 14px; font-weight: 600; }
@@ -335,10 +345,12 @@
     .history-card.current-season { border-color: rgba(56,239,125,0.35); box-shadow: 0 0 16px rgba(56,239,125,0.1); }
     .history-card.current-season::before { opacity: 1; }
     .trophy-icon { font-size: 24px; line-height: 1; }
-    .history-season { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+    .history-season { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); font-feature-settings: "tnum"; }
     .history-winner { font-size: 12px; font-weight: 600; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .current-label {
-      font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em;
+
+      font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.1em;
       color: var(--accent); text-transform: uppercase;
     }
 
@@ -354,7 +366,8 @@
       max-width: 100%; cursor: default;
     }
     .modal-caption {
-      font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted);
+
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted);
       text-align: center;
     }
     .modal img {
@@ -363,7 +376,8 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     .modal-error {
-      font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted);
+
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--muted);
       text-align: center; padding: 24px 32px; border: 1px dashed var(--border); border-radius: 8px;
     }
     .modal-close {
@@ -420,7 +434,8 @@
     .live-row:last-child { border-bottom: none; }
     .live-rank { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--muted); }
     .live-manager { font-size: 13px; font-weight: 600; color: var(--text); }
-    .live-team { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+    .live-team { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
     .live-pts { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--teal); text-align: right; }
     .live-trend { font-size: 10px; margin-left: 4px; }
     .trend-up { color: var(--accent); }
@@ -432,7 +447,8 @@
       background: linear-gradient(135deg, rgba(124,95,230,0.18), rgba(0,230,118,0.18));
       border: 1px solid var(--accent); color: var(--text);
       padding: 10px 20px; border-radius: 30px; cursor: pointer;
-      font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.05em;
+
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.05em;
       transition: all 0.2s; box-shadow: 0 0 16px rgba(0,230,118,0.08);
     }
     .action-btn:hover { background: linear-gradient(135deg, rgba(124,95,230,0.35), rgba(0,230,118,0.35)); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,230,118,0.25); }
@@ -767,7 +783,8 @@
         responsive: true,
         maintainAspectRatio: false,
         animation: prefersReducedMotion ? false : { duration: 400 },
-        plugins: { legend: { labels: { color: '#4a5568', font: { family: "'DM Mono', monospace", size: 10 } } } },
+
+        plugins: { legend: { labels: { color: '#4a5568', font: { family: "'JetBrains Mono', monospace", size: 10 } } } },
         scales: {
           x: { ticks: { color: '#4a5568', font: { size: 10 } }, grid: { color: 'rgba(30,38,54,0.5)' } },
           y: { ticks: { color: '#4a5568', font: { size: 10 } }, grid: { color: 'rgba(30,38,54,0.5)' } },
