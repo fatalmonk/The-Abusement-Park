@@ -859,7 +859,6 @@
         const wonYears = stats.data.filter(s => s.winner === name).map(s => s.year.slice(-2));
         const streak = trailingStreak(stats.data, name);
         const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-        const color = i === 0 ? 'var(--gold)' : i === 1 ? 'var(--silver)' : i === 2 ? 'var(--bronze)' : 'var(--text)';
         const streakTag = streak >= 2 ? `<span class="streak-badge" title="${streak} in a row">🔥 ×${streak}</span>` : '';
 
         const row = document.createElement('div');
