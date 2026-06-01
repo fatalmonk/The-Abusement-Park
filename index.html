@@ -243,7 +243,8 @@
       border-radius: 3px; color: var(--accent);
       border: 1px solid rgba(56,239,125,0.25); background: rgba(56,239,125,0.06);
     }
-    .wins-col { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; font-size: 20px; }
+    .wins-col { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; font-size: 20px; flex-direction: column; }
+    .wins-years { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; margin-top: 2px; }
     .streak-badge {
       display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px;
       padding: 1px 6px; border-radius: 3px; color: var(--gold);
@@ -866,15 +867,15 @@
         row.innerHTML = `
           <div class="rank-num">${i + 1}</div>
           <div class="manager-col" title="${safeName}">
-            ${renderAvatar(name)}
-            <div>
-              <div class="manager-name">${safeName}${streakTag}</div>
-              <div class="manager-titles">${wonYears.map(y => `<span class="season-badge">${escapeHtml(y)}</span>`).join('')}</div>
-            </div>
-          </div>
-          <div class="wins-col">
-                  ${wonYears.map(year => `<span title="Won '${year}"">🏆</span>`).join('')}
-                </div>`;
+                      ${renderAvatar(name)}
+                      <div>
+                        <div class="manager-name">${safeName}${streakTag}</div>
+                      </div>
+                    </div>
+                    <div class="wins-col">
+                      ${wonYears.map(year => `<span title="Won '${year}"">🏆</span>`).join('')}
+                      <div class="wins-years">${wonYears.map(y => `<span class="season-badge">${escapeHtml(y)}</span>`).join('')}</div>
+                    </div>`;
         standingsEl.appendChild(row);
       });
     }
