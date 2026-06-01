@@ -30,7 +30,7 @@ Edit the config block in `index.html` (search for `Config`):
 
 **Screenshots:** Save PNGs in `/images/` matching each `img` path (e.g. `images/2026.png`).
 
-**Deploy:** Push to `main` → GitHub Pages updates [theabusementpark.com](https://theabusementpark.com/).
+**Deploy:** Push to `main` → GitHub Pages updates [fatalmonk.github.io/The-Abusement-Park](https://fatalmonk.github.io/The-Abusement-Park/).
 
 ## License
 MIT License.
