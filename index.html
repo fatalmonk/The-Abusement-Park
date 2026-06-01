@@ -782,10 +782,8 @@
 
       const awardsFame = [
         { emoji: '👑', title: 'Dynasty', winner: dynasty[0], detail: `${dynasty[1]} titles — most in league history` },
-        { emoji: '🔥', title: 'Hot Streak', winner: hotStreak.name, detail: `${hotStreak.len} consecutive titles` },
         { emoji: '⚡', title: 'Back-to-Back', winner: backToBack.length ? backToBack.join(', ') : '—', detail: 'Won in consecutive seasons' },
         { emoji: '🌅', title: 'Comeback King', winner: ck ? ck.name : '—', detail: ck ? `${ck.gap}-season gap between wins` : 'N/A' },
-        { emoji: '🏛️', title: 'Founding Father', winner: foundingFathers.slice(0, 2).join(', '), detail: 'Won in league\'s first 3 seasons' },
         { emoji: '🎯', title: 'One-Hit Wonder', winner: oneHitWonders.length ? oneHitWonders.slice(0, 2).join(', ') : '—', detail: oneHitWonders.length > 2 ? `+${oneHitWonders.length - 2} more · exactly 1 title each` : 'Exactly 1 title each' },
       ];
 
@@ -798,21 +796,6 @@
       // Jawadur — special shame card
       if (managers.find(m => m.name === 'Jawadur Rahman')) {
         awardsShame.push({ emoji: '🕸️', title: '18 Years, 0 Crowns', winner: 'Jawadur Rahman', detail: 'Founding member. Witnessed every title. Won none.' });
-      }
-
-      // Wooden Spoon Club
-      if (neverWon.length) {
-        awardsShame.push({ emoji: '🥄', title: 'Wooden Spoon Club', winner: neverWon.map(m => m.name.split(' ')[0]).slice(0, 3).join(', '), detail: `${neverWon.length} manager${neverWon.length !== 1 ? 's' : ''} still titleless` });
-      }
-
-      // Perpetual Bridesmaid — runner-up 2+ times with only 1 win
-      if (bottleWinner && allTimeTally[bottleWinner[0]] <= 1 && bottleWinner[1] >= 2) {
-        awardsShame.push({ emoji: '💍', title: 'Perpetual Bridesmaid', winner: bottleWinner[0], detail: `${bottleWinner[1]} runner-up finishes, only ${allTimeTally[bottleWinner[0]] || 0} title` });
-      }
-
-      // One & Done
-      if (oneAndDone.length) {
-        awardsShame.push({ emoji: '📉', title: 'One & Done', winner: oneAndDone.slice(0, 2).join(', '), detail: `Won once, haven\'t come close since` });
       }
 
       // Reigning drought holder
