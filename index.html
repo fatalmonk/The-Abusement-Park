@@ -1,76 +1,477 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Abusement Park | FPL Mini League History</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<title>The Abusement Park — FPL Mini League</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Mono:wght@400;500&amp;family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&amp;display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0c10; --surface: #10141c; --border: #1e2530; --accent: #38ef7d;
-    --accent2: #11998e; --gold: #f5c842; --silver: #b0b8c8; --bronze: #cd7f32;
-    --text: #e8edf5; --muted: #5a6478;
+    --bg: #0a0c10;
+    --surface: #10141c;
+    --border: #1e2530;
+    --accent: #38ef7d;
+    --accent2: #11998e;
+    --gold: #f5c842;
+    --silver: #b0b8c8;
+    --bronze: #cd7f32;
+    --text: #e8edf5;
+    --muted: #5a6478;
+    --danger: #ff4d6d;
   }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 40px 20px; min-height: 100vh; }
-  .container { width: 100%; max-width: 720px; margin: 0 auto; }
-  
-  .header { text-align: center; margin-bottom: 36px; }
-  .title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 10vw, 80px); line-height: 0.9; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  
-  .stats-bar { display: flex; gap: 1px; background: var(--border); border-radius: 6px; margin-bottom: 28px; overflow: hidden; }
-  .stat { flex: 1; background: var(--surface); padding: 14px; text-align: center; }
-  .stat-val { font-family: 'Bebas Neue'; font-size: 28px; color: var(--accent); }
-  .stat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; }
 
-  .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; justify-content: flex-end; }
-  .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: 'DM Mono'; font-size: 11px; }
-  .filter-btn.active { border-color: var(--accent); color: var(--accent); }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56,239,125,0.08) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(30,37,48,0.4) 39px, rgba(30,37,48,0.4) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(30,37,48,0.2) 39px, rgba(30,37,48,0.2) 40px);
+  }
 
-  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .table-head { display: grid; grid-template-columns: 48px 1fr 80px 80px; padding: 10px 20px; background: rgba(56,239,125,0.04); border-bottom: 1px solid var(--border); }
-  .th { font-family: 'DM Mono'; font-size: 10px; color: var(--muted); text-transform: uppercase; }
-  .row { display: grid; grid-template-columns: 48px 1fr 80px 80px; padding: 10px 20px; align-items: center; border-bottom: 1px solid var(--border); }
-  .manager-col { display: flex; align-items: center; gap: 10px; }
-  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: var(--bg); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue'; font-size: 14px; }
-  
-  .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-top: 20px; }
-  .history-card { background: var(--surface); border: 1px solid var(--border); padding: 10px; border-radius: 6px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
-  .history-card:hover { border-color: var(--accent); background: rgba(56,239,125,0.05); }
+  .container {
+    width: 100%;
+    max-width: 720px;
+  }
 
-  .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(10,12,16,0.95); align-items: center; justify-content: center; }
-  .modal img { max-width: 90%; max-height: 80vh; border-radius: 4px; }
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .league-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    border: 1px solid rgba(56,239,125,0.3);
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    background: rgba(56,239,125,0.04);
+  }
+
+  .title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 10vw, 80px);
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent) 60%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 1px;
+    margin-bottom: 28px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .stat {
+    flex: 1;
+    background: var(--surface);
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-lbl {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 3px;
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    transition: all 0.15s ease;
+  }
+
+  .filter-btn:hover { border-color: rgba(56,239,125,0.4); color: var(--text); }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56,239,125,0.05); }
+
+  /* Table */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    animation: fadeUp 0.6s 0.35s ease both;
+  }
+
+  .table-head {
+    display: grid;
+    grid-template-columns: 48px 1fr 80px 80px;
+    padding: 10px 20px;
+    background: rgba(56,239,125,0.04);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .th.center { text-align: center; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 48px 1fr 80px 80px;
+    padding: 0 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    min-height: 56px;
+    transition: background 0.15s ease;
+    animation: rowIn 0.4s ease both;
+  }
+
+  .row:last-child { border-bottom: none; }
+  .row:hover { background: rgba(255,255,255,0.02); }
+
+  .row.rank-1 { background: rgba(245,200,66,0.05); }
+  .row.rank-2 { background: rgba(176,184,200,0.04); }
+  .row.rank-3 { background: rgba(205,127,50,0.04); }
+
+  .rank-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .rank-1 .rank-num { color: var(--gold); }
+  .rank-2 .rank-num { color: var(--silver); }
+  .rank-3 .rank-num { color: var(--bronze); }
+
+  .manager-col {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .manager-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .manager-titles {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+    flex-wrap: wrap;
+  }
+
+  .season-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--gold);
+    border: 1px solid rgba(245,200,66,0.3);
+    background: rgba(245,200,66,0.06);
+    letter-spacing: 0.05em;
+  }
+
+  .wins-col {
+    text-align: center;
+  }
+
+  .wins-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .wins-col .trophy-row {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 3px;
+    flex-wrap: wrap;
+    max-width: 70px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .trophy-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.7;
+  }
+
+  .share-col {
+    text-align: center;
+  }
+
+  .share-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .share-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    min-width: 4px;
+  }
+
+  .share-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* History section */
+  .history-section {
+    margin-top: 28px;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  .history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+
+  .history-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.15s, transform 0.15s;
+    cursor: pointer;
+  }
+
+  .history-card:hover { border-color: rgba(56,239,125,0.4); transform: translateY(-2px); }
+
+  .history-season {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .history-winner {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .trophy-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Modal/Lightbox */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10,12,16,0.95);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .modal.active {
+    display: flex;
+  }
+
+  .modal img {
+    max-width: 90%;
+    max-height: 80vh;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    animation: scaleIn 0.3s ease;
+  }
+
+  /* Keyframes */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes rowIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .row:nth-child(1) { animation-delay: 0.4s; }
+  .row:nth-child(2) { animation-delay: 0.47s; }
+  .row:nth-child(3) { animation-delay: 0.54s; }
+  .row:nth-child(4) { animation-delay: 0.61s; }
+  .row:nth-child(5) { animation-delay: 0.68s; }
+  .row:nth-child(6) { animation-delay: 0.75s; }
+  .row:nth-child(7) { animation-delay: 0.82s; }
+  .row:nth-child(8) { animation-delay: 0.89s; }
+  .row:nth-child(9) { animation-delay: 0.96s; }
+  .row:nth-child(10) { animation-delay: 1.03s; }
+
+  @media (max-width: 520px) {
+    .table-head, .row { grid-template-columns: 36px 1fr 60px 70px; padding: 0 12px; }
+    .history-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-bar { flex-direction: row; }
+  }
 </style>
 </head>
 <body>
 <div class="container">
+
   <div class="header">
+    <div class="league-tag">Fantasy Premier League · Mini League</div>
     <div class="title">The Abusement Park</div>
+    <div class="subtitle">18 seasons of suffering &amp; glory · 2008/09 — 2025/26</div>
   </div>
 
   <div class="stats-bar">
-    <div class="stat"><div class="stat-val">18</div><div class="stat-lbl">Seasons</div></div>
-    <div class="stat"><div class="stat-val">9</div><div class="stat-lbl">Champions</div></div>
-    <div class="stat"><div class="stat-val">5</div><div class="stat-lbl">Mac's Titles</div></div>
-    <div class="stat"><div class="stat-val">5</div><div class="stat-lbl">Abrar's Titles</div></div>
+    <div class="stat">
+      <div class="stat-val">18</div>
+      <div class="stat-lbl">Seasons</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">9</div>
+      <div class="stat-lbl">Champions</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">5</div>
+      <div class="stat-lbl">Mac's Titles</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">5</div>
+      <div class="stat-lbl">Abrar's Titles</div>
+    </div>
   </div>
 
   <div class="filter-bar">
     <button class="filter-btn active" onclick="updateView('all', this)">All Time</button>
     <button class="filter-btn" onclick="updateView('last5', this)">Last 5</button>
+    <button class="filter-btn" onclick="updateView('last10', this)">Last 10</button>
   </div>
 
   <div class="table-wrap">
     <div class="table-head">
-      <div class="th">#</div><div class="th">Manager</div><div class="th">Titles</div><div class="th">Share</div>
+      <div class="th">#</div>
+      <div class="th">Manager</div>
+      <div class="th center">Titles</div>
+      <div class="th center">Share</div>
     </div>
     <div id="standings"></div>
   </div>
 
-  <div class="history-grid" id="history"></div>
+  <div class="history-section">
+    <div class="section-label">Season by Season</div>
+    <div class="history-grid" id="history"></div>
+  </div>
+
 </div>
 
-<div id="lightbox" class="modal" onclick="this.style.display='none'">
+<!-- Lightbox Modal -->
+<div id="lightbox" class="modal" onclick="closeLightbox()">
   <img id="lightbox-img" src="" alt="Season Table">
 </div>
 
@@ -93,38 +494,99 @@ const seasons = [
   { year: "2022/23", winner: "Mac Alvi", img: "images/2023.png" },
   { year: "2023/24", winner: "Mac Alvi", img: "images/2024.png" },
   { year: "2024/25", winner: "Sajid Sadman", img: "images/2025.png" },
-  { year: "2025/26", winner: "Abrar Siddique", img: "images/2026.png" }
+  { year: "2025/26", winner: "Abrar Siddique", img: "images/2026.png" },
 ];
 
-const trophySVG = `<svg width="12" height="12" viewBox="0 0 16 16" fill="var(--gold)"><path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.506c.16-.12.343-.207.537-.255L6.5 13.086v-2.173c-.955-.234-2.043-1.146-2.833-3.011a3 3 0 1 1-1.133-5.89A5 5 0 0 1 2.5.5"/></svg>`;
+const avatarColors = [
+  ["#38ef7d","#0a0c10"], ["#f5c842","#0a0c10"], ["#ff4d6d","#fff"],
+  ["#818cf8","#fff"], ["#fb923c","#0a0c10"], ["#34d399","#0a0c10"],
+  ["#e879f9","#fff"], ["#60a5fa","#0a0c10"], ["#f87171","#fff"],
+];
 
 function updateView(mode, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const data = mode === 'last5' ? seasons.slice(-5) : seasons;
+
+  let data = seasons;
+  if (mode === 'last5') data = seasons.slice(-5);
+  if (mode === 'last10') data = seasons.slice(-10);
+
+  // Tally wins for selected range
   const tally = {};
-  data.forEach(s => tally[s.winner] = (tally[s.winner] || 0) + 1);
+  data.forEach(s => { tally[s.winner] = (tally[s.winner] || 0) + 1; });
   const sorted = Object.entries(tally).sort((a,b) => b[1]-a[1]);
-  
+  const total = data.length;
+
+  // Build standings
   const standingsEl = document.getElementById('standings');
-  standingsEl.innerHTML = sorted.map(([name, wins], i) => `
-    <div class="row">
+  standingsEl.innerHTML = '';
+
+  sorted.forEach(([name, wins], i) => {
+    const colorPair = avatarColors[i % avatarColors.length];
+    const initials = name.split(' ').map(w=>w[0]).slice(0,2).join('');
+    const pct = Math.round((wins/total)*100);
+    const barWidth = Math.max(4, Math.round((wins/sorted[0][1])*56));
+
+    // Get seasons won
+    const wonSeasons = data.filter(s => s.winner === name).map(s => s.year.slice(-2));
+
+    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+    const dots = Array(wins).fill('<div class="trophy-dot"></div>').join('');
+
+    const row = document.createElement('div');
+    row.className = `row ${rankClass}`;
+    row.innerHTML = `
       <div class="rank-num">${i+1}</div>
-      <div class="manager-col"><div class="avatar">${name.split(' ').map(n=>n[0]).join('')}</div>${name}</div>
-      <div>${wins} ${trophySVG}</div>
-      <div>${Math.round((wins/data.length)*100)}%</div>
-    </div>`).join('');
+      <div class="manager-col">
+        <div class="avatar" style="background:${colorPair[0]};color:${colorPair[1]}">${initials}</div>
+        <div>
+          <div class="manager-name">${name}</div>
+          <div class="manager-titles">
+            ${wonSeasons.map(y=>`<span class="season-badge">${y}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="wins-col">
+        <div class="wins-count" style="color:${i===0?'var(--gold)':i===1?'var(--silver)':i===2?'var(--bronze)':'var(--text)'}">${wins}</div>
+        <div class="trophy-row">${dots}</div>
+      </div>
+      <div class="share-col">
+        <div class="share-bar-wrap">
+          <div class="share-bar" style="width:${barWidth}px"></div>
+          <span class="share-pct">${pct}%</span>
+        </div>
+      </div>
+    `;
+    standingsEl.appendChild(row);
+  });
 }
 
+function openLightbox(imgSrc) {
+  document.getElementById('lightbox-img').src = imgSrc;
+  document.getElementById('lightbox').classList.add('active');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+
+// Build history
 const historyEl = document.getElementById('history');
 [...seasons].reverse().forEach(s => {
-  historyEl.innerHTML += `
-    <div class="history-card" onclick="document.getElementById('lightbox-img').src='${s.img}'; document.getElementById('lightbox').style.display='flex'">
-      <div>🏆</div>
-      <div><div style="font-size:10px; color:var(--muted)">${s.year}</div><div style="font-size:12px; font-weight:600">${s.winner.split(' ')[0]}</div></div>
-    </div>`;
+  const card = document.createElement('div');
+  card.className = 'history-card';
+  card.onclick = () => openLightbox(s.img);
+  card.innerHTML = `
+    <div class="trophy-icon">🏆</div>
+    <div>
+      <div class="history-season">${s.year}</div>
+      <div class="history-winner">${s.winner.split(' ')[0]}</div>
+    </div>
+  `;
+  historyEl.appendChild(card);
 });
 
+// Init
 updateView('all', document.querySelector('.filter-btn'));
 </script>
 </body>
