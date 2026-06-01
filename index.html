@@ -18,18 +18,26 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <style>
     :root {
-      --bg: #0a0c10;
-      --surface: #10141c;
-      --surface-light: #1a1f2e;
-      --border: #1e2530;
-      --accent: #38ef7d;
-      --gold: #f5c842;
-      --silver: #b0b8c8;
-      --bronze: #cd7f32;
-      --text: #e8edf5;
-      --muted: #5a6478;
-      --fpl-purple: #6938ef;
-      --fpl-cyan: #00ff87;
+      --bg: #080b11;
+      --surface: #0e1118;
+      --surface-light: #161c28;
+      --surface-hover: #1c2335;
+      --border: #1e2636;
+      --border-light: #273042;
+      --accent: #00e676;
+      --accent-dim: rgba(0,230,118,0.12);
+      --teal: #64ffda;
+      --purple: #7c5fe6;
+      --shame: #ff6b6b;
+      --shame-dim: rgba(255,107,107,0.1);
+      --gold: #ffd740;
+      --gold-dim: rgba(255,215,64,0.1);
+      --silver: #b8c4d8;
+      --bronze: #e8903a;
+      --text: #e4eaf5;
+      --text-muted: #8896ad;
+      --muted: #4a5568;
+      --fpl-cyan: var(--teal);
       --sticky-top: 0;
     }
 
@@ -43,10 +51,10 @@
       padding: 40px 20px 60px;
       line-height: 1.6;
       background-image:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(105,56,239,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(56,239,125,0.08) 0%, transparent 50%),
-        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(30,37,48,0.4) 39px, rgba(30,37,48,0.4) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(30,37,48,0.2) 39px, rgba(30,37,48,0.2) 40px);
+        radial-gradient(ellipse 90% 50% at 50% -5%, rgba(124,95,230,0.14) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 95% 95%, rgba(0,230,118,0.07) 0%, transparent 50%),
+        repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(30,38,54,0.35) 47px, rgba(30,38,54,0.35) 48px),
+        repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(30,38,54,0.18) 47px, rgba(30,38,54,0.18) 48px);
     }
 
     .container { width: 100%; max-width: 900px; margin: 0 auto; }
@@ -62,24 +70,24 @@
       display: inline-flex; align-items: center; gap: 8px;
       margin-bottom: 16px; padding: 8px 14px;
       font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
-      color: var(--fpl-cyan); text-decoration: none;
-      border: 1px solid rgba(0,255,135,0.25); border-radius: 20px;
-      background: rgba(0,255,135,0.05); transition: border-color 0.2s, background 0.2s;
+      color: var(--teal); text-decoration: none;
+      border: 1px solid rgba(100,255,218,0.25); border-radius: 20px;
+      background: rgba(100,255,218,0.05); transition: border-color 0.2s, background 0.2s;
     }
-    .fpl-link:hover { border-color: var(--accent); background: rgba(56,239,125,0.1); }
+    .fpl-link:hover { border-color: var(--teal); background: rgba(100,255,218,0.1); }
     .fpl-link img { width: 20px; height: 20px; object-fit: contain; }
 
     .league-tag {
       display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px;
-      letter-spacing: 0.15em; color: var(--fpl-cyan); text-transform: uppercase;
-      border: 1px solid rgba(0,255,135,0.2); padding: 6px 16px; border-radius: 20px;
-      margin-bottom: 8px; background: rgba(0,255,135,0.04);
+      letter-spacing: 0.15em; color: var(--teal); text-transform: uppercase;
+      border: 1px solid rgba(100,255,218,0.2); padding: 6px 16px; border-radius: 20px;
+      margin-bottom: 8px; background: rgba(100,255,218,0.04);
     }
 
     .title {
       font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 10vw, 72px);
       letter-spacing: 0.02em; line-height: 0.95;
-      background: linear-gradient(135deg, #fff 0%, var(--accent) 40%, var(--fpl-purple) 100%);
+      background: linear-gradient(140deg, #fff 0%, var(--accent) 45%, var(--purple) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       margin-bottom: 8px;
     }
@@ -87,7 +95,8 @@
     .hall-of-fame {
       font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 8vw, 56px);
       font-weight: 400; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;
-      margin: 8px 0 16px; text-shadow: 0 0 30px rgba(245,200,66,0.4);
+      margin: 8px 0 16px;
+      text-shadow: 0 0 30px rgba(255,215,64,0.35), 0 0 60px rgba(255,215,64,0.15);
     }
 
     .subtitle { font-size: 13px; color: var(--muted); letter-spacing: 0.05em; }
@@ -105,12 +114,12 @@
     }
     .stat::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--fpl-purple));
+      background: linear-gradient(90deg, var(--accent), var(--purple));
     }
     .stat:hover { transform: translateY(-2px); border-color: rgba(56,239,125,0.3); }
     .stat-val {
       font-family: 'Bebas Neue', sans-serif; font-size: clamp(24px, 6vw, 32px);
-      background: linear-gradient(135deg, var(--accent), var(--fpl-cyan));
+      background: linear-gradient(135deg, var(--accent), var(--teal));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       line-height: 1;
     }
@@ -164,8 +173,8 @@
     .filter-btn:hover { border-color: rgba(56,239,125,0.4); color: var(--text); }
     .filter-btn.active {
       border-color: var(--accent); color: var(--accent);
-      background: linear-gradient(135deg, rgba(56,239,125,0.1), rgba(105,56,239,0.1));
-      box-shadow: 0 0 20px rgba(56,239,125,0.1);
+      background: rgba(0,230,118,0.08);
+      box-shadow: 0 0 20px rgba(0,230,118,0.12);
     }
 
     /* Podium */
@@ -220,7 +229,7 @@
     .row:hover { background: rgba(255,255,255,0.02); }
     .row.rank-1 { background: linear-gradient(90deg, rgba(245,200,66,0.08), transparent); border-left: 3px solid var(--gold); }
     .row.rank-2 { background: linear-gradient(90deg, rgba(176,184,200,0.06), transparent); border-left: 3px solid var(--silver); }
-    .row.rank-3 { background: linear-gradient(90deg, rgba(205,127,50,0.06), transparent); border-left: 3px solid var(--bronze); }
+    .row.rank-3 { background: linear-gradient(90deg, rgba(232,144,58,0.05), transparent); border-left: 3px solid var(--bronze); }
     .row:not(.rank-1):not(.rank-2):not(.rank-3) { border-left: 3px solid transparent; }
     .rank-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--muted); padding-left: 4px; }
     .rank-1 .rank-num { color: var(--gold); }
@@ -250,7 +259,7 @@
     .streak-badge {
       display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px;
       padding: 1px 6px; border-radius: 3px; color: var(--gold);
-      border: 1px solid rgba(245,200,66,0.35); background: rgba(245,200,66,0.07);
+      border: 1px solid rgba(255,215,64,0.3); background: var(--gold-dim);
       margin-left: 4px; white-space: nowrap; vertical-align: middle;
     }
 
@@ -412,7 +421,7 @@
     .live-rank { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--muted); }
     .live-manager { font-size: 13px; font-weight: 600; color: var(--text); }
     .live-team { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
-    .live-pts { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--fpl-cyan); text-align: right; }
+    .live-pts { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--teal); text-align: right; }
     .live-trend { font-size: 10px; margin-left: 4px; }
     .trend-up { color: var(--accent); }
     .trend-down { color: #f87171; }
@@ -420,16 +429,13 @@
 
     /* Action Button (Bragging Rights) */
     .action-btn {
-      background: linear-gradient(135deg, rgba(105,56,239,0.2), rgba(56,239,125,0.2));
+      background: linear-gradient(135deg, rgba(124,95,230,0.18), rgba(0,230,118,0.18));
       border: 1px solid var(--accent); color: var(--text);
       padding: 10px 20px; border-radius: 30px; cursor: pointer;
-      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
-      letter-spacing: 0.05em; transition: all 0.2s ease; box-shadow: 0 0 15px rgba(56,239,125,0.1);
+      font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.05em;
+      transition: all 0.2s; box-shadow: 0 0 16px rgba(0,230,118,0.08);
     }
-    .action-btn:hover {
-      background: linear-gradient(135deg, rgba(105,56,239,0.4), rgba(56,239,125,0.4));
-      transform: translateY(-2px); box-shadow: 0 5px 20px rgba(56,239,125,0.3);
-    }
+    .action-btn:hover { background: linear-gradient(135deg, rgba(124,95,230,0.35), rgba(0,230,118,0.35)); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,230,118,0.25); }
   </style>
   <script type="application/ld+json" id="json-ld"></script>
 </head>
@@ -590,9 +596,9 @@
     ];
 
     const AVATAR_COLORS = [
-      ["#38ef7d","#0a0c10"], ["#f5c842","#0a0c10"], ["#ff4d6d","#fff"],
-      ["#818cf8","#fff"], ["#fb923c","#0a0c10"], ["#34d399","#0a0c10"],
-      ["#e879f9","#fff"], ["#60a5fa","#0a0c10"], ["#f87171","#fff"],
+      ["#00e676","#0a0c10"], ["#ffd740","#0a0c10"], ["#ff6b6b","#fff"],
+      ["#818cf8","#fff"],    ["#fb923c","#0a0c10"], ["#34d399","#0a0c10"],
+      ["#e879f9","#fff"],    ["#60a5fa","#0a0c10"], ["#f87171","#fff"],
     ];
 
     const colorMap = {};
@@ -761,10 +767,10 @@
         responsive: true,
         maintainAspectRatio: false,
         animation: prefersReducedMotion ? false : { duration: 400 },
-        plugins: { legend: { labels: { color: '#5a6478', font: { family: "'DM Mono', monospace", size: 10 } } } },
+        plugins: { legend: { labels: { color: '#4a5568', font: { family: "'DM Mono', monospace", size: 10 } } } },
         scales: {
-          x: { ticks: { color: '#5a6478', font: { size: 10 } }, grid: { color: 'rgba(30,37,48,0.6)' } },
-          y: { ticks: { color: '#5a6478', font: { size: 10 } }, grid: { color: 'rgba(30,37,48,0.6)' } },
+          x: { ticks: { color: '#4a5568', font: { size: 10 } }, grid: { color: 'rgba(30,38,54,0.5)' } },
+          y: { ticks: { color: '#4a5568', font: { size: 10 } }, grid: { color: 'rgba(30,38,54,0.5)' } },
         },
       };
 
