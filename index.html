@@ -450,7 +450,7 @@
 
     <section class="live-section" id="live-widget-section" aria-label="Current Season Live Standings">
       <div class="section-header">
-        <h2 class="section-label">🔴 Live 26/27 Standings</h2>
+        <h2 class="section-label">🔴 Live 25/26 Standings</h2>
         <div class="section-line"></div>
       </div>
       <div id="live-widget-content">
@@ -565,7 +565,7 @@
 
     // Members who have never won — add names not listed as winners in seasons
     const MANAGERS_EXTRA = [
-      // e.g. { name: 'Someone Else', avatarUrl: 'images/avatars/someone.png' },
+      { name: 'Jawadur Rahman', avatarUrl: '' }, // 18 seasons, 0 crowns — the OG sufferer
     ];
 
     const seasons = [
@@ -1035,8 +1035,9 @@
     function buildHistory() {
       const historyEl = document.getElementById('history');
       const latestYear = seasons[seasons.length - 1].year;
-      [...seasons].reverse().forEach(s => {
+      seasons.map((s, idx) => ({ s, idx })).reverse().forEach(({ s, idx }) => {
         const idx = seasons.indexOf(s);
+        const isCurrent = s.year === latestYear;
         const isCurrent = s.year === latestYear;
         const card = document.createElement('div');
         card.className = `history-card${isCurrent ? ' current-season' : ''}`;
@@ -1085,9 +1086,10 @@
         container.innerHTML = `
           <div class="live-table">
             ${top5.map(team => {
-              let trend = '<span class="live-trend trend-flat">−</span>';
-              if (team.last_rank < team.rank) trend = '<span class="live-trend trend-down">▼</span>';
-              if (team.last_rank > team.rank) trend = '<span class="live-trend trend-up">▲</span>';
+              // Fixed trend logic: lower rank number = better position
+        let trend = '<span class="live-trend trend-flat">−</span>';
+        if (team.last_rank !== 0 && team.rank < team.last_rank) trend = '<span class="live-trend trend-up">▲</span>';
+        else if (team.last_rank !== 0 && team.rank > team.last_rank) trend = '<span class="live-trend trend-down">▼</span>';
 
               return `
                 <div class="live-row">
