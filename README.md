@@ -16,7 +16,7 @@ If you are an admin and need to update the league stats:
 1. **Update Data:** Edit the `seasons` array in `script.js` to add the most recent season.
 2. **Add Screenshots:** Save the final table image in the `/images` folder.
 3. **Link Images:** Update the `img` property in the `seasons` array to match your filename.
-4. **Deploy:** Simply push your changes to the `main` branch, and GitHub Pages will automatically update [theabusementpark.com](https://theabusementpark.com).
+4. **Deploy:** Simply push your changes to the `main` branch, and GitHub Pages will automatically update [fatalmonk.github.io/The-Abusement-Park/](https://fatalmonk.github.io/The-Abusement-Park/).
 
 ## License
 This project is licensed under the MIT License.
