@@ -1,39 +1,25 @@
-# The Abusement Park
+# The Abusement Park 🏆
 
-A seasonal journey visual archive.
+Welcome to the official home of **The Abusement Park**, the premier Fantasy Premier League (FPL) mini-league where suffering meets glory.
 
-## Overview
+## About
+Founded in 2008, this league has hosted 18 seasons of high-stakes FPL management. This repository contains the source code for our historical dashboard, tracking winners, statistics, and season-by-season performance data.
 
-This is a simple static site hosting seasonal archives for The Abusement Park project.
+## Features
+- **Dynamic Leaderboard:** Track all-time champions and recent form.
+- **Season Archives:** Clickable history cards to view final league table screenshots.
+- **Responsive Design:** Optimized for mobile and desktop viewing.
 
-## Structure
+## Setup for Contributors
+If you are an admin and need to update the league stats:
 
-```
-├── index.html          # Main dashboard
-├── CNAME               # Custom domain configuration
-├── README.md           # This file
-├── .gitignore          # Git ignore rules
-├── LICENSE             # MIT License
-├── favicon.ico         # Browser favicon
-└── /images             # Season screenshots
-    ├── 2008_09.png
-    ├── ...
-    └── 2025_26.png
-```
-
-## Deploying
-
-1. Push to GitHub
-2. Enable GitHub Pages in repo settings
-3. Point domain DNS to GitHub Pages
-4. Done
-
-## Adding New Season
-
-1. Add screenshot to `/images/` as `YYYY_YY.png`
-2. Update `index.html` seasons array
-3. Commit and push
+1. **Update Data:** Edit the `seasons` array in `script.js` to add the most recent season.
+2. **Add Screenshots:** Save the final table image in the `/images` folder.
+3. **Link Images:** Update the `img` property in the `seasons` array to match your filename.
+4. **Deploy:** Simply push your changes to the `main` branch, and GitHub Pages will automatically update [theabusementpark.com](https://theabusementpark.com).
 
 ## License
+This project is licensed under the MIT License.
 
-MIT License - See LICENSE file
+---
+*Built for the managers of The Abusement Park.*

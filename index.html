@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Abusement Park</title>
+    <title>The Abusement Park | FPL Mini-League</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
+        :root {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --accent-gold: #feca57;
+            --accent-red: #ff6b6b;
+            --text-primary: #f0f0f0;
+            --text-secondary: #888;
+            --border: #333;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -14,137 +24,142 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f0f23;
-            color: #f0f0f0;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem;
+            padding: 2rem 1rem;
+            line-height: 1.6;
         }
         
         header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
         
         h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
         }
         
         .tagline {
-            color: #888;
-            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .league-info {
+            margin: 2rem 0;
+            padding: 1rem 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .league-info p {
+            color: var(--text-secondary);
         }
         
         .seasons-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             width: 100%;
             max-width: 1200px;
         }
         
         .season-card {
-            background: #1a1a2e;
-            border: 1px solid #333;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.2s ease, border-color 0.2s ease;
             cursor: pointer;
         }
         
         .season-card:hover {
             transform: translateY(-4px);
-            border-color: #ff6b6b;
+            border-color: var(--accent-red);
         }
         
         .season-card img {
             width: 100%;
-            height: 180px;
+            height: 160px;
             object-fit: cover;
             display: block;
+            background: var(--bg-primary);
         }
         
         .season-card-content {
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
         
         .season-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: #feca57;
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: var(--accent-gold);
         }
         
-        .season-card p {
-            color: #888;
+        .season-card .winner {
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .season-card p:last-child {
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
         
         footer {
             margin-top: auto;
             padding-top: 3rem;
-            color: #666;
+            color: var(--text-secondary);
             font-size: 0.85rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .seasons-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <header>
+        <div class="logo">🏆</div>
         <h1>The Abusement Park</h1>
-        <p class="tagline">A journey through the seasons</p>
+        <p class="tagline">Fantasy Premier League Mini-League since 2008</p>
     </header>
     
+    <div class="league-info">
+        <p>18 seasons of glory, heartbreak, and tactical genius</p>
+    </div>
+    
     <main class="seasons-grid" id="seasonsGrid">
-        <!-- Seasons will be dynamically populated -->
+        <!-- Seasons populated by script.js -->
     </main>
     
     <footer>
-        <p>© The Abusement Park | theabusementpark.com</p>
+        <p>© The Abusement Park | <a href="https://theabusementpark.com" style="color: var(--accent-gold); text-decoration: none;">theabusementpark.com</a></p>
     </footer>
     
-    <script>
-        const seasons = [
-            { year: '2008-09', title: 'Season 2008-09', desc: 'The beginning' },
-            { year: '2009-10', title: 'Season 2009-10', desc: 'Growing pains' },
-            { year: '2010-11', title: 'Season 2010-11', desc: 'Finding our stride' },
-            { year: '2011-12', title: 'Season 2011-12', desc: 'Expansion' },
-            { year: '2012-13', title: 'Season 2012-13', desc: 'New heights' },
-            { year: '2013-14', title: 'Season 2013-14', desc: 'Maturing' },
-            { year: '2014-15', title: 'Season 2014-15', desc: 'Evolution' },
-            { year: '2015-16', title: 'Season 2015-16', desc: 'Redefining' },
-            { year: '2016-17', title: 'Season 2016-17', desc: 'Resilience' },
-            { year: '2017-18', title: 'Season 2017-18', desc: 'Transformation' },
-            { year: '2018-19', title: 'Season 2018-19', desc: 'Innovation' },
-            { year: '2019-20', title: 'Season 2019-20', desc: 'Adaptation' },
-            { year: '2020-21', title: 'Season 2020-21', desc: ' perseverance' },
-            { year: '2021-22', title: 'Season 2021-22', desc: 'Rebuilding' },
-            { year: '2022-23', title: 'Season 2022-23', desc: 'Momentum' },
-            { year: '2023-24', title: 'Season 2023-24', desc: 'Collaboration' },
-            { year: '2024-25', title: 'Season 2024-25', desc: 'Excellence' },
-            { year: '2025-26', title: 'Season 2025-26', desc: 'The future' }
-        ];
-        
-        const grid = document.getElementById('seasonsGrid');
-        
-        seasons.forEach(season => {
-            const card = document.createElement('div');
-            card.className = 'season-card';
-            card.innerHTML = `
-                <img src="images/${season.year}.png" 
-                     alt="${season.title}" 
-                     onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 180%22><rect fill=%22%231a1a2e%22 width=%22400%22 height=%22180%22/><text fill=%22%23666%22 x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22>${season.year}</text></svg>'">
-                <div class="season-card-content">
-                    <h3>${season.title}</h3>
-                    <p>${season.desc}</p>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
