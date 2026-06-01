@@ -243,7 +243,8 @@
       border-radius: 3px; color: var(--accent);
       border: 1px solid rgba(56,239,125,0.25); background: rgba(56,239,125,0.06);
     }
-    .wins-col { display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: nowrap; font-size: 18px; flex-direction: column; }
+    .wins-col { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .wins-trophies { display: flex; gap: 4px; flex-wrap: nowrap; font-size: 18px; }
     .wins-years { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; margin-top: 2px; }
     .streak-badge {
       display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px;
@@ -378,7 +379,7 @@
       .stats-bar { grid-template-columns: repeat(2, 1fr); }
       .table-head, .row { grid-template-columns: 40px 1fr 200px; padding: 10px 12px; }
       .avatar { width: 32px; height: 32px; font-size: 12px; }
-      .wins-col { font-size: 16px; gap: 2px; }
+      .wins-trophies { font-size: 16px; gap: 2px; }
       .history-grid { grid-template-columns: repeat(2, 1fr); }
       .modal { padding: 20px 48px; }
     }
@@ -874,9 +875,9 @@
                       </div>
                     </div>
                     <div class="wins-col">
-                      ${wonYears.map(year => `<span title="Won '${year}"">🏆</span>`).join('')}
-                      <div class="wins-years">${wonYears.map(y => `<span class="season-badge">${escapeHtml(y)}</span>`).join('')}</div>
-                    </div>`;
+                                <div class="wins-trophies">${wonYears.map(year => `<span title="Won '${year}"">🏆</span>`).join('')}</div>
+                                <div class="wins-years">${wonYears.map(y => `<span class="season-badge">${escapeHtml(y)}</span>`).join('')}</div>
+                              </div>`;
         standingsEl.appendChild(row);
       });
     }
