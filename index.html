@@ -243,12 +243,8 @@
       border-radius: 3px; color: var(--accent);
       border: 1px solid rgba(56,239,125,0.25); background: rgba(56,239,125,0.06);
     }
-    .wins-col { display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
+    .wins-col { display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
     .wins-count { font-family: 'Bebas Neue', sans-serif; font-size: 20px; line-height: 1; }
-    .trophy-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold), #ff9500); opacity: 0.85; flex-shrink: 0;
-    }
     .streak-badge {
       display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px;
       padding: 1px 6px; border-radius: 3px; color: var(--gold);
@@ -827,7 +823,7 @@
         <div class="stat"><div class="stat-val">${stats.total}</div><div class="stat-lbl">Seasons</div></div>
         <div class="stat"><div class="stat-val">${stats.uniqueChamps}</div><div class="stat-lbl">Champions</div></div>
         <div class="stat"><div class="stat-val">${escapeHtml(stats.latestWinner)}</div><div class="stat-lbl">Reigning Champ</div></div>
-        <div class="stat" title="${escapeHtml(bottleTitle)}"><div class="stat-val">${escapeHtml(bottleFirst)}</div><div class="stat-lbl">Chief Bottler</div></div>The site is deployed at theabusementpark.com via GitHub Pages.
+        <div class="stat" title="${escapeHtml(bottleTitle)}"><div class="stat-val">${escapeHtml(bottleFirst)}</div><div class="stat-lbl">Chief Bottler</div></div>
 
 
 
@@ -863,7 +859,7 @@
           </div>
           <div class="wins-col">
             <div class="wins-count" style="color:${color}">${wins}</div>
-            ${Array(wins).fill('<div class="trophy-dot"></div>').join('')}
+            ${Array(wins).fill('🏆').join(' ')}
           </div>`;
         standingsEl.appendChild(row);
       });
