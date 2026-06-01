@@ -516,17 +516,17 @@
       { year: "2012/13", winner: "Arka Basak",            runnerUp: "", img: "images/2013.png" },
       { year: "2013/14", winner: "Arka Basak",            runnerUp: "", img: "images/2014.png" },
       { year: "2014/15", winner: "Mac Alvi",              runnerUp: "", img: "images/2015.png" },
-      { year: "2015/16", winner: "Abrar Siddique",        runnerUp: "", img: "images/2016.png" },
-      { year: "2016/17", winner: "Rainul Islam",          runnerUp: "", img: "images/2017.png" },
-      { year: "2017/18", winner: "Abrar Siddique",        runnerUp: "", img: "images/2018.png" },
-      { year: "2018/19", winner: "Irfan Ahmed",           runnerUp: "", img: "images/2019.png" },
-      { year: "2019/20", winner: "Ohidul Islam",          runnerUp: "", img: "images/2020.png" },
-      { year: "2020/21", winner: "Abrar Siddique",        runnerUp: "", img: "images/2021.png" },
-      { year: "2021/22", winner: "Abrar Siddique",        runnerUp: "", img: "images/2022.png" },
-      { year: "2022/23", winner: "Mac Alvi",              runnerUp: "", img: "images/2023.png" },
-      { year: "2023/24", winner: "Mac Alvi",              runnerUp: "", img: "images/2024.png" },
-      { year: "2024/25", winner: "Sajid Sadman",          runnerUp: "", img: "images/2025.png" },
-      { year: "2025/26", winner: "Abrar Siddique",        runnerUp: "", img: "images/2026.png" },
+      { year: "2015/16", winner: "Abrar Siddique",        runnerUp: "Irfan Ahmed",      img: "images/2016.png" },
+      { year: "2016/17", winner: "Rainul Islam",          runnerUp: "",                 img: "images/2017.png" },
+      { year: "2017/18", winner: "Abrar Siddique",        runnerUp: "Rabez Ahmed",      img: "images/2018.png" },
+      { year: "2018/19", winner: "Irfan Ahmed",           runnerUp: "",                 img: "images/2019.png" },
+      { year: "2019/20", winner: "Ohidul Islam",          runnerUp: "Motiur Palash",    img: "images/2020.png" },
+      { year: "2020/21", winner: "Abrar Siddique",        runnerUp: "",                 img: "images/2021.png" },
+      { year: "2021/22", winner: "Abrar Siddique",        runnerUp: "Irfan Ahmed",      img: "images/2022.png" },
+      { year: "2022/23", winner: "Mac Alvi",              runnerUp: "Irfan Ahmed",      img: "images/2023.png" },
+      { year: "2023/24", winner: "Mac Alvi",              runnerUp: "Shamjid Siraj",    img: "images/2024.png" },
+      { year: "2024/25", winner: "Sajid Sadman",          runnerUp: "Abrar Siddique",   img: "images/2025.png" },
+      { year: "2025/26", winner: "Abrar Siddique",        runnerUp: "Sabiul Azam",      img: "images/2026.png" },
     ];
 
     const AVATAR_COLORS = [
@@ -676,21 +676,20 @@
       const latest = data[data.length - 1];
       const latestWinner = latest ? latest.winner.split(' ')[0] : '—';
 
-      let bestRun = { len: 0, name: '' };
-      [...new Set(data.map(s => s.winner))].forEach(name => {
-        let cur = 0, max = 0;
-        data.forEach(s => {
-          if (s.winner === name) { cur++; max = Math.max(max, cur); }
-          else cur = 0;
-        });
-        if (max > bestRun.len) bestRun = { len: max, name };
+      const runnerUpInView = {};
+      data.forEach(s => {
+        if (s.runnerUp) runnerUpInView[s.runnerUp] = (runnerUpInView[s.runnerUp] || 0) + 1;
       });
+      const bottleEntry = Object.entries(runnerUpInView).sort((a, b) => b[1] - a[1])[0];
+      const bottleLeader = bottleEntry
+        ? { name: bottleEntry[0], count: bottleEntry[1] }
+        : null;
 
       return {
         data, tally, sorted, total,
         uniqueChamps: Object.keys(tally).length,
         neverWon, droughts, awards,
-        latestWinner, bestRun,
+        latestWinner, bottleLeader,
       };
     }
 
@@ -818,12 +817,15 @@
       const stats = buildStats(mode);
       document.getElementById('standings-panel').setAttribute('aria-labelledby', btn.id);
 
-      const streakName = stats.bestRun.name ? stats.bestRun.name.split(' ')[0] : '—';
+      const bottleFirst = stats.bottleLeader?.name.split(' ')[0] || '—';
+      const bottleTitle = stats.bottleLeader
+        ? `${stats.bottleLeader.count} runner-up finish${stats.bottleLeader.count !== 1 ? 'es' : ''} in this view`
+        : 'No runner-up data in this view';
       document.getElementById('stats-bar').innerHTML = `
         <div class="stat"><div class="stat-val">${stats.total}</div><div class="stat-lbl">Seasons</div></div>
         <div class="stat"><div class="stat-val">${stats.uniqueChamps}</div><div class="stat-lbl">Champions</div></div>
         <div class="stat"><div class="stat-val">${escapeHtml(stats.latestWinner)}</div><div class="stat-lbl">Reigning Champ</div></div>
-        <div class="stat"><div class="stat-val">${stats.bestRun.len || 0}</div><div class="stat-lbl">${stats.bestRun.len > 1 ? escapeHtml(streakName) + ' Streak' : 'Best Run'}</div></div>
+        <div class="stat" title="${escapeHtml(bottleTitle)}"><div class="stat-val">${escapeHtml(bottleFirst)}</div><div class="stat-lbl">Bottle Leader</div></div>
       `;
 
       renderPodium(stats.sorted);
