@@ -261,7 +261,7 @@
       margin-left: 6px; white-space: nowrap; vertical-align: middle;
     }
 
-    /* Never won / drought */
+    /* Mini cards */
     .side-section { margin-bottom: 36px; animation: fadeUp 0.6s 0.35s ease both; }
     .awards-shame-section { margin-top: 56px; }
     .awards-section .section-header { justify-content: center; }
@@ -398,7 +398,12 @@
       .table-head, .row { grid-template-columns: 40px 1fr 200px; padding: 10px 12px; }
       .avatar { width: 32px; height: 32px; font-size: 12px; }
       .wins-trophies { font-size: 16px; gap: 2px; }
-      .history-grid { grid-template-columns: repeat(2, 1fr); }
+      .history-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+      .history-card { min-height: 88px; padding: 9px 6px; gap: 3px; border-radius: var(--radius-sm); }
+      .trophy-icon { font-size: 18px; }
+      .history-season { font-size: 9px; }
+      .history-winner { font-size: 11px; }
+      .current-label { font-size: 7px; }
       .modal { padding: 20px 48px; }
     }
 
@@ -517,14 +522,6 @@
         <div class="section-line"></div>
       </div>
       <div class="awards-grid" id="awards-fame"></div>
-    </section>
-
-    <section class="side-section" id="drought-section" aria-label="Longest title droughts">
-      <div class="section-header">
-        <h2 class="section-label">Longest Droughts</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="mini-grid" id="droughts"></div>
     </section>
 
     <div class="table-wrap" id="standings-panel" role="tabpanel" aria-labelledby="tab-all">
@@ -792,7 +789,7 @@
       const awardsFame = [
         { emoji: '👑', title: 'Title Machine', winner: dynastyWinners.join(' & '), detail: `${dynasty[1]} titles each — most in league history` },
         { emoji: '⚡', title: 'Back-to-Back', winner: backToBack.length ? backToBack.join(', ') : '—', detail: 'Won in consecutive seasons' },
-        { emoji: '🩸', title: 'First Blood', winner: foundingFathers.join(' & '), detail: 'Set the tone in the league’s first 3 seasons' },
+        { emoji: '📚', title: 'Record Breakers', winner: dynastyWinners.join(' & '), detail: 'Joint record holders for total championships' },
       ];
 
           const awardsShame = [];
@@ -837,7 +834,7 @@
       return {
         data, tally, sorted, total,
         uniqueChamps: Object.keys(tally).length,
-        neverWon, droughts, awardsFame, awardsShame,
+        neverWon, awardsFame, awardsShame,
         latestWinner, bottleLeader,
       };
     }
@@ -858,15 +855,6 @@
           <div class="podium-lbl">${wins === 1 ? 'title' : 'titles'}</div>
         </div>`;
       }).join('');
-    }
-
-    function renderDroughts(droughts) {
-      document.getElementById('droughts').innerHTML = droughts.map(d => `
-        <div class="mini-card">
-          <div class="mini-name">${escapeHtml(d.name)}</div>
-          <div class="mini-stat">${d.neverWon ? 'Never won' : `${d.seasons} season${d.seasons !== 1 ? 's' : ''} since last title`}</div>
-        </div>
-      `).join('');
     }
 
     function renderAwards(fame, shame) {
@@ -1191,7 +1179,6 @@
       setupBraggingRights();
 
       const allTimeStats = buildStats('all');
-      renderDroughts(allTimeStats.droughts);
       renderAwards(allTimeStats.awardsFame, allTimeStats.awardsShame);
 
       document.getElementById('lightbox').addEventListener('click', e => {
