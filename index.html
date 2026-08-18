@@ -1073,6 +1073,41 @@
     }, true);
 
     // --- FEATURE: Live FPL Standings ---
+    function renderLiveRows(rows) {
+      return `
+        <div class="live-table">
+          ${rows.map(team => {
+            // Lower rank number = better position.
+            let trend = '<span class="live-trend trend-flat">−</span>';
+            if (team.lastRank !== 0 && team.rank < team.lastRank) trend = '<span class="live-trend trend-up">▲</span>';
+            else if (team.lastRank !== 0 && team.rank > team.lastRank) trend = '<span class="live-trend trend-down">▼</span>';
+
+            return `
+              <div class="live-row">
+                <div class="live-rank">${team.rank}${trend}</div>
+                <div>
+                  <div class="live-manager"><a class="live-profile-link" href="${fplProfileUrl(team.entry)}" target="_blank" rel="noopener noreferrer">${escapeHtml(team.playerName)}</a></div>
+                  <div class="live-team">${escapeHtml(team.teamName)}</div>
+                </div>
+                <div class="live-pts">${team.total}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function fallbackLiveRows() {
+      return CURRENT_LEAGUE_PLAYERS.map((team, index) => ({
+        entry: team.entry,
+        playerName: team.name,
+        teamName: team.team,
+        rank: index + 1,
+        lastRank: 0,
+        total: 'New',
+      }));
+    }
+
     async function loadLiveStandings() {
       const container = document.getElementById('live-widget-content');
       if (!LEAGUE_ID) {
@@ -1105,31 +1140,10 @@
           total: 'New',
         }));
         const rows = standingsRows.length ? standingsRows.slice(0, 5) : newEntryRows;
-
-        container.innerHTML = `
-          <div class="live-table">
-            ${rows.map(team => {
-              // Fixed trend logic: lower rank number = better position
-        let trend = '<span class="live-trend trend-flat">−</span>';
-        if (team.lastRank !== 0 && team.rank < team.lastRank) trend = '<span class="live-trend trend-up">▲</span>';
-        else if (team.lastRank !== 0 && team.rank > team.lastRank) trend = '<span class="live-trend trend-down">▼</span>';
-
-              return `
-                <div class="live-row">
-                  <div class="live-rank">${team.rank}${trend}</div>
-                  <div>
-                    <div class="live-manager"><a class="live-profile-link" href="${fplProfileUrl(team.entry)}" target="_blank" rel="noopener noreferrer">${escapeHtml(team.playerName)}</a></div>
-                    <div class="live-team">${escapeHtml(team.teamName)}</div>
-                  </div>
-                  <div class="live-pts">${team.total}</div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        `;
+        container.innerHTML = renderLiveRows(rows);
       } catch (error) {
         console.error("Error fetching live FPL data:", error);
-        container.innerHTML = '<div class="empty-note">Failed to load live standings. FPL API might be down or updating.</div>';
+        container.innerHTML = renderLiveRows(fallbackLiveRows());
       }
     }
 
