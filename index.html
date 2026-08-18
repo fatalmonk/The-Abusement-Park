@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Abusement Park | FPL Mini League History</title>
+  <title>The Abusement Park | Winning is everything.</title>
   <meta name="description" content="Hall of Fame for The Abusement Park FPL mini-league — 18 seasons of winners, stats, and season archives since 2008/09.">
-  <meta property="og:title" content="The Abusement Park | FPL Mini League History">
+  <meta property="og:title" content="The Abusement Park | Winning is everything.">
   <meta property="og:description" content="18 seasons of suffering &amp; glory. All-time champions, filters, and season-by-season archive.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://fatalmonk.github.io/The-Abusement-Park/">
@@ -963,7 +963,6 @@
         const place = places[i];
         return `<div class="podium-card ${place}">
           <div class="podium-medal">${medals[i]}</div>
-          ${renderAvatar(name)}
           <div class="podium-name">${renderManagerName(name)}</div>
           <div class="podium-titles">${wins}</div>
           <div class="podium-lbl">${wins === 1 ? 'title' : 'titles'}</div>
@@ -981,7 +980,6 @@
       section.hidden = false;
       el.innerHTML = neverWon.map(m => `
         <div class="mini-card">
-          ${renderAvatar(m.name)}
           <div class="mini-name">${escapeHtml(m.name)}</div>
           <div class="mini-stat">${seasonsForManager(m.name, m.since)} seasons · 0 titles</div>
         </div>
@@ -1018,7 +1016,7 @@
 
     function buildTimeline() {
       const el = document.getElementById('timeline');
-      el.innerHTML = seasons.map((s, i) => {
+      el.innerHTML = seasons.map((s, i) => ({ s, i })).reverse().map(({ s, i }) => {
         const [bg] = avatarColor(s.winner);
         const first = s.winner.split(' ')[0];
         return `<button type="button" class="timeline-chip" data-index="${i}" role="listitem"
@@ -1081,7 +1079,6 @@
         row.innerHTML = `
           <div class="rank-num">${i + 1}</div>
           <div class="manager-col" title="${safeName}">
-                      ${renderAvatar(name)}
                       <div>
                         <div class="manager-name">${renderManagerName(name)}${streakTag}</div>
                       </div>
