@@ -762,10 +762,10 @@
 
       const allTimeTally = {};
       seasons.forEach(s => { allTimeTally[s.winner] = (allTimeTally[s.winner] || 0) + 1; });
-      const oneHitWonders = Object.entries(allTimeTally).filter(([, w]) => w === 1).map(([n]) => n);
       const dynasty = Object.entries(allTimeTally).sort((a, b) => b[1] - a[1])[0];
-      const hotStreak = longestEverStreak();
-      const ck = comebackKing();
+      const dynastyWinners = Object.entries(allTimeTally)
+        .filter(([, wins]) => wins === dynasty[1])
+        .map(([name]) => name);
 
       // Founding fathers — won in first 3 seasons (2008/09–2010/11)
       const early3 = new Set(seasons.slice(0, 3).map(s => s.winner));
@@ -790,10 +790,9 @@
         .map(([n]) => n);
 
       const awardsFame = [
-        { emoji: '👑', title: 'Dynasty', winner: dynasty[0], detail: `${dynasty[1]} titles — most in league history` },
+        { emoji: '👑', title: 'Dynasty', winner: dynastyWinners.join(' & '), detail: `${dynasty[1]} titles each — most in league history` },
         { emoji: '⚡', title: 'Back-to-Back', winner: backToBack.length ? backToBack.join(', ') : '—', detail: 'Won in consecutive seasons' },
-        { emoji: '🌅', title: 'Comeback King', winner: ck ? ck.name : '—', detail: ck ? `${ck.gap}-season gap between wins` : 'N/A' },
-        { emoji: '🎯', title: 'One-Hit Wonder', winner: oneHitWonders.length ? oneHitWonders.slice(0, 2).join(', ') : '—', detail: oneHitWonders.length > 2 ? `+${oneHitWonders.length - 2} more · exactly 1 title each` : 'Exactly 1 title each' },
+        { emoji: '🏆', title: 'Title Machine', winner: dynastyWinners.join(' & '), detail: `${dynasty[1]} championships and counting` },
       ];
 
           const awardsShame = [];
