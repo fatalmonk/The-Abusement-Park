@@ -263,6 +263,9 @@
 
     /* Never won / drought */
     .side-section { margin-bottom: 36px; animation: fadeUp 0.6s 0.35s ease both; }
+    .awards-shame-section { margin-top: 56px; }
+    .awards-section .section-header { justify-content: center; }
+    .awards-section .section-line { display: none; }
     .mini-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
     }
@@ -500,7 +503,7 @@
       <div class="history-grid" id="history"></div>
     </section>
 
-    <section class="side-section" aria-label="Fun awards">
+    <section class="side-section awards-section awards-shame-section" aria-label="Fun awards">
       <div class="section-header">
         <h2 class="section-label">Wall of Shame</h2>
         <div class="section-line"></div>
@@ -508,7 +511,7 @@
       <div class="awards-grid" id="awards-shame"></div>
     </section>
 
-    <section class="side-section" aria-label="Positive awards">
+    <section class="side-section awards-section" aria-label="Positive awards">
       <div class="section-header">
         <h2 class="section-label">Hall of Fame</h2>
         <div class="section-line"></div>
