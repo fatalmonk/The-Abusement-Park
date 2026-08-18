@@ -309,6 +309,8 @@
 
     /* History */
     .history-section { margin-top: 8px; animation: fadeUp 0.6s 0.5s ease both; }
+    .history-section .section-header { justify-content: center; }
+    .history-section .section-line { display: none; }
     .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
     .section-label {
       font-family: var(--display); font-size: 17px; font-weight: 400;
@@ -498,12 +500,20 @@
       <div class="history-grid" id="history"></div>
     </section>
 
-    <section class="side-section" id="never-won-section" aria-label="Managers without a title">
+    <section class="side-section" aria-label="Fun awards">
       <div class="section-header">
-        <h2 class="section-label">Never Won</h2>
+        <h2 class="section-label">Wall of Shame</h2>
         <div class="section-line"></div>
       </div>
-      <div class="mini-grid" id="never-won"></div>
+      <div class="awards-grid" id="awards-shame"></div>
+    </section>
+
+    <section class="side-section" aria-label="Positive awards">
+      <div class="section-header">
+        <h2 class="section-label">Hall of Fame</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="awards-grid" id="awards-fame"></div>
     </section>
 
     <section class="side-section" id="drought-section" aria-label="Longest title droughts">
@@ -512,22 +522,6 @@
         <div class="section-line"></div>
       </div>
       <div class="mini-grid" id="droughts"></div>
-    </section>
-
-    <section class="side-section" aria-label="Positive awards">
-      <div class="section-header">
-        <h2 class="section-label">Wall of Fame</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="awards-grid" id="awards-fame"></div>
-    </section>
-
-    <section class="side-section" aria-label="Fun awards">
-      <div class="section-header">
-        <h2 class="section-label">Wall of Shame</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="awards-grid" id="awards-shame"></div>
     </section>
 
     <div class="table-wrap" id="standings-panel" role="tabpanel" aria-labelledby="tab-all">
@@ -864,22 +858,6 @@
       }).join('');
     }
 
-    function renderNeverWon(neverWon) {
-      const el = document.getElementById('never-won');
-      const section = document.getElementById('never-won-section');
-      if (!neverWon.length) {
-        section.hidden = true;
-        return;
-      }
-      section.hidden = false;
-      el.innerHTML = neverWon.map(m => `
-        <div class="mini-card">
-          <div class="mini-name">${escapeHtml(m.name)}</div>
-          <div class="mini-stat">${seasonsForManager(m.name, m.since)} seasons · 0 titles</div>
-        </div>
-      `).join('');
-    }
-
     function renderDroughts(droughts) {
       document.getElementById('droughts').innerHTML = droughts.map(d => `
         <div class="mini-card">
@@ -1197,7 +1175,6 @@
       setupBraggingRights();
 
       const allTimeStats = buildStats('all');
-      renderNeverWon(allTimeStats.neverWon);
       renderDroughts(allTimeStats.droughts);
       renderAwards(allTimeStats.awardsFame, allTimeStats.awardsShame);
 
