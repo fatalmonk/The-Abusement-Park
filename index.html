@@ -37,6 +37,12 @@
       --text: #e4eaf5;
       --text-muted: #8896ad;
       --muted: #4a5568;
+      --mono: 'JetBrains Mono', monospace;
+      --display: 'Bebas Neue', sans-serif;
+      --body: 'DM Sans', system-ui, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
       --fpl-cyan: var(--teal);
       --sticky-top: 0;
     }
@@ -46,10 +52,11 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'DM Sans', system-ui, sans-serif;
+      font-family: var(--body);
       min-height: 100vh;
-      padding: 40px 20px 60px;
+      padding: 48px 20px 80px;
       line-height: 1.6;
+      font-feature-settings: "kern" 1;
       background-image:
         radial-gradient(ellipse 90% 50% at 50% -5%, rgba(124,95,230,0.14) 0%, transparent 65%),
         radial-gradient(ellipse 50% 40% at 95% 95%, rgba(0,230,118,0.07) 0%, transparent 50%),
@@ -57,58 +64,58 @@
         repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(30,38,54,0.18) 47px, rgba(30,38,54,0.18) 48px);
     }
 
-    .container { width: 100%; max-width: 900px; margin: 0 auto; }
+    .container { width: 100%; max-width: 920px; margin: 0 auto; }
 
     .sr-only {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
     }
 
-    .header { text-align: center; margin-bottom: 28px; animation: fadeDown 0.6s ease both; }
+    .header { text-align: center; margin-bottom: 36px; animation: fadeDown 0.7s ease both; }
 
     .fpl-link {
       display: inline-flex; align-items: center; gap: 8px;
-      margin-bottom: 16px; padding: 8px 14px;
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
+      margin-bottom: 20px; padding: 8px 16px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
       color: var(--teal); text-decoration: none;
-      border: 1px solid rgba(100,255,218,0.25); border-radius: 20px;
-      background: rgba(100,255,218,0.05); transition: border-color 0.2s, background 0.2s;
+      border: 1px solid rgba(100,255,218,0.2); border-radius: 24px;
+      background: rgba(100,255,218,0.04); transition: border-color 0.2s, background 0.2s;
     }
-    .fpl-link:hover { border-color: var(--teal); background: rgba(100,255,218,0.1); }
+    .fpl-link:hover { border-color: var(--teal); background: rgba(100,255,218,0.08); }
     .fpl-link img { width: 20px; height: 20px; object-fit: contain; }
 
     .league-tag {
-      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px;
-      letter-spacing: 0.15em; color: var(--teal); text-transform: uppercase;
-      border: 1px solid rgba(100,255,218,0.2); padding: 6px 16px; border-radius: 20px;
-      margin-bottom: 8px; background: rgba(100,255,218,0.04);
+      display: inline-block; font-family: var(--mono); font-size: 11px;
+      letter-spacing: 0.18em; color: var(--teal); text-transform: uppercase;
+      border: 1px solid rgba(100,255,218,0.18); padding: 5px 18px; border-radius: 24px;
+      margin-bottom: 10px; background: rgba(100,255,218,0.04);
     }
 
     .title {
-      font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 10vw, 72px);
-      letter-spacing: 0.02em; line-height: 0.95;
+      font-family: var(--display); font-size: clamp(44px, 11vw, 80px);
+      letter-spacing: 0.03em; line-height: 0.93;
       background: linear-gradient(140deg, #fff 0%, var(--accent) 45%, var(--purple) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .hall-of-fame {
-      font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 8vw, 56px);
-      font-weight: 400; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;
-      margin: 8px 0 16px;
-      text-shadow: 0 0 30px rgba(255,215,64,0.35), 0 0 60px rgba(255,215,64,0.15);
+      font-family: var(--display); font-size: clamp(28px, 7vw, 52px);
+      font-weight: 400; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase;
+      margin: 6px 0 14px;
+      text-shadow: 0 0 40px rgba(255,215,64,0.35), 0 0 80px rgba(255,215,64,0.15);
     }
 
-    .subtitle { font-size: 13px; color: var(--muted); letter-spacing: 0.05em; }
+    .subtitle { font-size: 13px; color: var(--text-muted); letter-spacing: 0.04em; }
 
     .stats-bar {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
-      margin-bottom: 24px; animation: fadeUp 0.6s 0.2s ease both;
+      margin-bottom: 28px; animation: fadeUp 0.6s 0.15s ease both;
     }
 
     .stat {
-      background: linear-gradient(145deg, var(--surface-light), var(--surface));
-      border: 1px solid var(--border); border-radius: 12px; padding: 16px 8px;
+      background: var(--surface-light);
+      border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 10px;
       text-align: center; position: relative; overflow: hidden;
       transition: transform 0.2s, border-color 0.2s;
     }
@@ -116,50 +123,49 @@
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, var(--accent), var(--purple));
     }
-    .stat:hover { transform: translateY(-2px); border-color: rgba(56,239,125,0.3); }
+    .stat:hover { transform: translateY(-2px); border-color: var(--border-light); }
     .stat-val {
-      font-family: 'Bebas Neue', sans-serif; font-size: clamp(24px, 6vw, 32px);
+      font-family: var(--display); font-size: clamp(26px, 6vw, 34px);
       background: linear-gradient(135deg, var(--accent), var(--teal));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       line-height: 1;
     }
     .stat-lbl {
-      font-size: 9px; color: var(--muted); text-transform: uppercase;
-      letter-spacing: 0.1em; margin-top: 4px;
-      font-feature-settings: "tnum";
+      font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.12em; margin-top: 5px;
     }
 
     /* Timeline */
-    .timeline-section { margin-bottom: 24px; animation: fadeUp 0.6s 0.25s ease both; }
+    .timeline-section { margin-bottom: 28px; animation: fadeUp 0.6s 0.2s ease both; }
     .timeline-scroll {
-      display: flex; gap: 8px; overflow-x: auto; padding: 8px 4px 12px;
+      display: flex; gap: 8px; overflow-x: auto; padding: 8px 2px 14px;
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
     }
-    .timeline-scroll::-webkit-scrollbar { height: 6px; }
-    .timeline-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .timeline-scroll::-webkit-scrollbar { height: 4px; }
+    .timeline-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
     .timeline-chip {
-      flex: 0 0 auto; scroll-snap-align: start; min-width: 72px; padding: 10px 8px;
-      border-radius: 10px; border: 1px solid var(--border); cursor: pointer;
-      text-align: center; transition: transform 0.15s, border-color 0.15s;
+      flex: 0 0 auto; scroll-snap-align: start; min-width: 74px; padding: 10px 8px;
+      border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer;
+      text-align: center; transition: transform 0.15s, border-color 0.2s;
       background: var(--surface);
     }
-    .timeline-chip:hover { transform: translateY(-2px); border-color: rgba(56,239,125,0.5); }
+    .timeline-chip:hover { transform: translateY(-3px); border-color: rgba(0,230,118,0.4); }
     .timeline-chip .chip-year {
 
-      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); margin-bottom: 4px;
+      font-family: var(--mono); font-size: 9px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.08em;
     }
     .timeline-chip .chip-name {
         font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        background: linear-gradient(135deg, #ffd700 0%, #b8860b 50%, #ffd700 100%);
+        background: linear-gradient(135deg, var(--gold) 0%, #c8960a 60%, var(--gold) 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       }
 
     /* Sticky filters */
     .filter-sticky-wrap {
       position: sticky; top: var(--sticky-top); z-index: 100;
-      padding: 12px 0; margin-bottom: 16px;
-      background: rgba(10,12,16,0.88); backdrop-filter: blur(12px);
+      padding: 12px 0; margin-bottom: 20px;
+      background: rgba(8,11,17,0.9); backdrop-filter: blur(14px) saturate(1.4);
       border-bottom: 1px solid transparent; transition: border-color 0.2s;
     }
     .filter-sticky-wrap.is-stuck { border-bottom-color: var(--border); }
@@ -167,84 +173,85 @@
     .filter-bar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 
     .filter-btn {
-      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-      padding: 8px 16px; border-radius: 20px; cursor: pointer;
+      background: var(--surface); border: 1px solid var(--border); color: var(--text-muted);
+      padding: 8px 20px; border-radius: 24px; cursor: pointer;
 
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
       transition: all 0.15s ease;
     }
-    .filter-btn:hover { border-color: rgba(56,239,125,0.4); color: var(--text); }
+    .filter-btn:hover { border-color: rgba(0,230,118,0.35); color: var(--text); }
     .filter-btn.active {
       border-color: var(--accent); color: var(--accent);
       background: rgba(0,230,118,0.08);
-      box-shadow: 0 0 20px rgba(0,230,118,0.12);
+      box-shadow: 0 0 18px rgba(0,230,118,0.12);
     }
 
     /* Podium */
-    .podium-section { margin-bottom: 24px; animation: fadeUp 0.6s 0.3s ease both; }
+    .podium-section { margin-bottom: 28px; animation: fadeUp 0.6s 0.25s ease both; }
     .podium {
-      display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 12px; align-items: end;
+      display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 14px; align-items: end;
     }
     .podium-card {
-      background: linear-gradient(145deg, var(--surface-light), var(--surface));
-      border: 1px solid var(--border); border-radius: 14px; padding: 16px 12px;
-      text-align: center; position: relative;
+      background: var(--surface-light);
+      border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 12px;
+      text-align: center; position: relative; transition: transform 0.2s;
     }
-    .podium-card.place-1 { order: 2; padding-top: 24px; border-color: rgba(245,200,66,0.4); }
+    .podium-card.place-1 { order: 2; padding-top: 28px; border-color: rgba(255,215,64,0.35); box-shadow: 0 0 30px rgba(255,215,64,0.08); }
     .podium-card.place-2 { order: 1; }
     .podium-card.place-3 { order: 3; }
-    .podium-medal { font-size: 28px; line-height: 1; margin-bottom: 8px; }
-    .podium-card.place-1 .podium-medal { font-size: 36px; }
-    .podium-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .podium-card:hover { transform: translateY(-3px); }
+    .podium-medal { font-size: 30px; line-height: 1; margin-bottom: 10px; }
+    .podium-card.place-1 .podium-medal { font-size: 40px; }
+    .podium-name { font-size: 13px; font-weight: 600; margin-bottom: 5px; }
     .podium-titles {
-      font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1;
+      font-family: var(--display); font-size: 30px; line-height: 1;
     }
-    .podium-card.place-1 .podium-titles { color: var(--gold); }
+    .podium-card.place-1 .podium-titles { color: var(--gold); font-size: 38px; }
     .podium-card.place-2 .podium-titles { color: var(--silver); }
     .podium-card.place-3 .podium-titles { color: var(--bronze); }
     .podium-lbl {
 
-      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px;
+      font-family: var(--mono); font-size: 9px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px;
     }
 
     /* Table */
     .table-wrap {
-      background: linear-gradient(145deg, var(--surface-light), var(--surface));
-      border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
-      margin-bottom: 32px; animation: fadeUp 0.6s 0.35s ease both;
+      background: var(--surface-light);
+      border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+      margin-bottom: 36px; animation: fadeUp 0.6s 0.3s ease both;
     }
     .table-head {
-      display: grid; grid-template-columns: 50px 1fr 320px; padding: 12px 16px;
-      background: linear-gradient(90deg, rgba(56,239,125,0.05), rgba(105,56,239,0.05));
+      display: grid; grid-template-columns: 52px 1fr 300px; padding: 13px 18px;
+      background: linear-gradient(90deg, rgba(0,230,118,0.04), rgba(124,95,230,0.04));
       border-bottom: 1px solid var(--border);
     }
     .th {
 
-      font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
       color: var(--muted); text-transform: uppercase;
     }
     .th.center { text-align: center; }
     .row {
-      display: grid; grid-template-columns: 50px 1fr 320px; padding: 12px 16px;
-      align-items: center; border-bottom: 1px solid var(--border); min-height: 60px;
-      transition: background 0.15s ease; animation: rowIn 0.4s ease both;
+      display: grid; grid-template-columns: 52px 1fr 300px; padding: 13px 18px;
+      align-items: center; border-bottom: 1px solid var(--border); min-height: 62px;
+      transition: background 0.15s ease; animation: rowIn 0.35s ease both;
     }
     .row:last-child { border-bottom: none; }
-    .row:hover { background: rgba(255,255,255,0.02); }
-    .row.rank-1 { background: linear-gradient(90deg, rgba(245,200,66,0.08), transparent); border-left: 3px solid var(--gold); }
-    .row.rank-2 { background: linear-gradient(90deg, rgba(176,184,200,0.06), transparent); border-left: 3px solid var(--silver); }
+    .row:hover { background: var(--surface-hover); }
+    .row.rank-1 { background: linear-gradient(90deg, rgba(255,215,64,0.07), transparent); border-left: 3px solid var(--gold); }
+    .row.rank-2 { background: linear-gradient(90deg, rgba(184,196,216,0.05), transparent); border-left: 3px solid var(--silver); }
     .row.rank-3 { background: linear-gradient(90deg, rgba(232,144,58,0.05), transparent); border-left: 3px solid var(--bronze); }
     .row:not(.rank-1):not(.rank-2):not(.rank-3) { border-left: 3px solid transparent; }
-    .rank-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--muted); padding-left: 4px; }
+    .rank-num { font-family: var(--display); font-size: 20px; color: var(--muted); padding-left: 4px; }
     .rank-1 .rank-num { color: var(--gold); }
     .rank-2 .rank-num { color: var(--silver); }
     .rank-3 .rank-num { color: var(--bronze); }
     .manager-col { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .avatar {
-      width: 36px; height: 36px; border-radius: 50%; display: flex;
+      width: 38px; height: 38px; border-radius: 50%; display: flex;
       align-items: center; justify-content: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: 13px;
+      font-family: var(--display); font-size: 13px;
       flex-shrink: 0; border: 2px solid var(--border); overflow: hidden;
     }
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -252,50 +259,61 @@
       font-size: 14px; font-weight: 600; color: var(--text);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+    .manager-link,
+    .live-profile-link {
+      color: inherit;
+      text-decoration: none;
+    }
+    .manager-link:hover,
+    .live-profile-link:hover {
+      color: var(--teal);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
     .manager-titles { display: flex; gap: 3px; margin-top: 2px; flex-wrap: wrap; }
     .season-badge {
-          font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 1px 4px;
-          border-radius: 3px; color: var(--accent);
-          border: 1px solid rgba(56,239,125,0.25); background: rgba(56,239,125,0.06);
+          font-family: var(--mono); font-size: 9px; padding: 1px 5px;
+          border-radius: 4px; color: var(--accent);
+          border: 1px solid rgba(0,230,118,0.22); background: rgba(0,230,118,0.06);
           font-feature-settings: "tnum";
         }
     .wins-col { display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .wins-trophies { display: flex; gap: 4px; flex-wrap: nowrap; font-size: 18px; }
-    .wins-years { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; margin-top: 2px; }
+    .wins-years { display: flex; gap: 3px; flex-wrap: wrap; justify-content: center; margin-top: 3px; }
     .streak-badge {
 
-      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 9px;
-      padding: 1px 6px; border-radius: 3px; color: var(--gold);
+      display: inline-block; font-family: var(--mono); font-size: 9px;
+      padding: 1px 7px; border-radius: 4px; color: var(--gold);
       border: 1px solid rgba(255,215,64,0.3); background: var(--gold-dim);
-      margin-left: 4px; white-space: nowrap; vertical-align: middle;
+      margin-left: 6px; white-space: nowrap; vertical-align: middle;
     }
 
     /* Charts */
-    .charts-section { margin-bottom: 32px; }
+    .charts-section { margin-bottom: 36px; }
     .chart-card {
-      background: linear-gradient(145deg, var(--surface-light), var(--surface));
-      border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+      background: var(--surface-light);
+      border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px;
     }
     .chart-title {
 
-      font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
-      color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+      color: var(--muted); text-transform: uppercase; margin-bottom: 14px;
     }
     .chart-wrap { position: relative; height: 240px; }
 
     /* Never won / drought */
-    .side-section { margin-bottom: 32px; animation: fadeUp 0.6s 0.4s ease both; }
+    .side-section { margin-bottom: 36px; animation: fadeUp 0.6s 0.35s ease both; }
     .mini-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
     }
     .mini-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-      padding: 12px; text-align: center;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 14px 12px; text-align: center;
     }
-    .mini-card .mini-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .mini-card .mini-name { font-size: 13px; font-weight: 600; margin-bottom: 5px; }
     .mini-card .mini-stat {
 
-      font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted);
+      font-family: var(--mono); font-size: 10px; color: var(--text-muted); letter-spacing: 0.04em;
     }
     .empty-note {
       font-size: 13px; color: var(--muted); font-style: italic; padding: 8px 0;
@@ -306,8 +324,8 @@
       display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
     }
     .award-card {
-      background: linear-gradient(145deg, var(--surface-light), var(--surface));
-      border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+      background: var(--surface-light);
+      border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;
       position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s;
     }
     .award-card:hover { transform: translateY(-2px); border-color: var(--border-light); }
@@ -320,23 +338,23 @@
       background: linear-gradient(90deg, var(--shame), var(--bronze));
     }
     .award-card.shame { border-color: rgba(255,107,107,0.15); background: linear-gradient(145deg, rgba(255,107,107,0.04), var(--surface)); }
-    .award-emoji { font-size: 24px; margin-bottom: 6px; }
+    .award-emoji { font-size: 26px; margin-bottom: 8px; line-height: 1; }
     .award-title {
 
-      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em;
-      color: var(--muted); text-transform: uppercase; margin-bottom: 4px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+      color: var(--muted); text-transform: uppercase; margin-bottom: 5px;
     }
-    .award-winner { font-size: 14px; font-weight: 600; }
-    .award-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .award-winner { font-size: 14px; font-weight: 600; color: var(--text); }
+    .award-detail { font-size: 12px; color: var(--text-muted); margin-top: 5px; line-height: 1.4; }
 
     /* History */
     .history-section { margin-top: 8px; animation: fadeUp 0.6s 0.5s ease both; }
-    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
     .section-label {
-      font-family: 'Bebas Neue', sans-serif; font-size: 16px; font-weight: 400;
-      letter-spacing: 0.1em; color: var(--text); text-transform: uppercase; white-space: nowrap;
+      font-family: var(--display); font-size: 17px; font-weight: 400;
+      letter-spacing: 0.12em; color: var(--text); text-transform: uppercase; white-space: nowrap;
     }
-    .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+    .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-light), transparent); }
     .history-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;
     }
@@ -433,24 +451,25 @@
     }
 
     /* Live Widget */
-    .live-section { margin-bottom: 24px; animation: fadeDown 0.6s 0.1s ease both; }
+    .live-section { margin-bottom: 28px; animation: fadeDown 0.6s 0.1s ease both; }
     .live-table {
-      background: linear-gradient(145deg, var(--surface-light), var(--surface));
-      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      background: var(--surface-light);
+      border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;
     }
     .live-row {
-      display: grid; grid-template-columns: 40px 1fr 60px; padding: 10px 16px;
+      display: grid; grid-template-columns: 44px 1fr 64px; padding: 11px 18px;
       align-items: center; border-bottom: 1px solid var(--border);
     }
     .live-row:last-child { border-bottom: none; }
-    .live-rank { font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--muted); }
+    .live-row:hover { background: var(--surface-hover); }
+    .live-rank { font-family: var(--display); font-size: 17px; color: var(--muted); }
     .live-manager { font-size: 13px; font-weight: 600; color: var(--text); }
 
-    .live-team { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
-    .live-pts { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--teal); text-align: right; }
-    .live-trend { font-size: 10px; margin-left: 4px; }
+    .live-team { font-family: var(--mono); font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+    .live-pts { font-family: var(--display); font-size: 20px; color: var(--teal); text-align: right; font-feature-settings: "tnum"; }
+    .live-trend { font-size: 10px; margin-left: 5px; vertical-align: middle; }
     .trend-up { color: var(--accent); }
-    .trend-down { color: #f87171; }
+    .trend-down { color: var(--shame); }
     .trend-flat { color: var(--muted); }
 
     /* Action Button (Bragging Rights) */
@@ -483,7 +502,7 @@
 
     <section class="live-section" id="live-widget-section" aria-label="Current Season Live Standings">
       <div class="section-header">
-        <h2 class="section-label">🔴 Live 25/26 Standings</h2>
+        <h2 class="section-label">🔴 Live 26/27 Standings</h2>
         <div class="section-line"></div>
       </div>
       <div id="live-widget-content">
@@ -594,11 +613,12 @@
 
   <script>
     // ── Config (edit here) ──────────────────────────────────────────
-    const LEAGUE_ID = '22345';
+    const LEAGUE_ID = '113546';
 
     // Members who have never won — add names not listed as winners in seasons
     const MANAGERS_EXTRA = [
-      { name: 'Jawadur Rahman', avatarUrl: '' }, // 18 seasons, 0 crowns — the OG sufferer
+      { name: 'Jawadur Rahman', avatarUrl: '', since: '2008/09' }, // 18 seasons, 0 crowns — the OG sufferer
+      { name: 'Wakif Mahmud', avatarUrl: '', since: '2015/16' }, // joined mid-era
     ];
 
     const seasons = [
@@ -622,10 +642,34 @@
       { year: "2025/26", winner: "Abrar Siddique",        runnerUp: "Sabiul Azam",      img: "images/2026.png" },
     ];
 
+    const FPL_PROFILE_BASE = 'https://fantasy.premierleague.com/entry';
+    const CURRENT_LEAGUE_PLAYERS = [
+      { entry: 5210060, name: 'Salvi Ali', team: 'Walangas' },
+      { entry: 5038971, name: 'Nabid Hassan Kafi', team: 'Alabaster Softshoes' },
+      { entry: 4759536, name: 'Md Tawfiqul Hasan Khan', team: 'sunnynchelsea' },
+      { entry: 3481222, name: 'Sabiul Azam', team: 'Golazo' },
+      { entry: 3232113, name: 'Muzakkir Chowdhury', team: 'Muzakkir' },
+      { entry: 3141367, name: 'Shahedul Alam', team: 'VegaPunk FC' },
+      { entry: 2865865, name: 'Abtahee Majid Ajmain', team: '666 FC' },
+      { entry: 2808481, name: 'Mohammed Jawadur Rahman', team: 'Oishee FC', aliases: ['Jawadur Rahman'] },
+      { entry: 2297947, name: 'Nameeb Itmaam', team: 'Maguire Machh' },
+      { entry: 2279392, name: 'Shamjid Siraj', team: 'Tyrants FC' },
+      { entry: 2127998, name: 'Saifur Rahman Chowdhury', team: 'Average Guys FC' },
+      { entry: 1569009, name: 'Amal Vishak', team: 'Kobbie 11' },
+      { entry: 1512229, name: 'Iori Imasu', team: "Iori's Team" },
+      { entry: 758562, name: 'Sabbab Hossain', team: 'BUDDHA' },
+      { entry: 358165, name: 'Ali Baba', team: "Ali's Team" },
+      { entry: 106071, name: 'Abrar Siddiquee', team: 'GoalDiggers ⭐ ⭐ ⭐ ⭐⭐', aliases: ['Abrar Siddique'] },
+      { entry: 478867, name: 'Ohidul Islam', team: 'Zoro ⭐️⭐️⭐️' },
+      { entry: 523129, name: 'Irfan Ahmed', team: 'TheatreofMidtable⭐' },
+      { entry: 570338, name: 'MAC Alvi', team: '⭐ ⭐ ⭐ ⭐⭐', aliases: ['Mac Alvi'] },
+    ];
+
     const AVATAR_COLORS = [
       ["#00e676","#0a0c10"], ["#ffd740","#0a0c10"], ["#ff6b6b","#fff"],
       ["#818cf8","#fff"],    ["#fb923c","#0a0c10"], ["#34d399","#0a0c10"],
       ["#e879f9","#fff"],    ["#60a5fa","#0a0c10"], ["#f87171","#fff"],
+      ["#a78bfa","#fff"],    ["#64ffda","#0a0c10"], ["#fbbf24","#0a0c10"],
     ];
 
     const colorMap = {};
@@ -645,11 +689,36 @@
       managerByName.set(entry.name, entry);
     });
     const managers = [...managerByName.values()];
+    const fplProfileByName = new Map();
+    CURRENT_LEAGUE_PLAYERS.forEach(player => {
+      [player.name, ...(player.aliases || [])].forEach(name => {
+        fplProfileByName.set(normalizeName(name), player);
+      });
+    });
 
     function escapeHtml(str) {
       return String(str)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;')
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function normalizeName(name) {
+      return String(name).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    }
+
+    function fplProfileUrl(entry) {
+      return `${FPL_PROFILE_BASE}/${entry}/history`;
+    }
+
+    function profileForManager(name) {
+      return fplProfileByName.get(normalizeName(name)) || null;
+    }
+
+    function renderManagerName(name, className = 'manager-link') {
+      const profile = profileForManager(name);
+      const label = escapeHtml(name);
+      if (!profile) return label;
+      return `<a class="${className}" href="${fplProfileUrl(profile.entry)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
     }
 
     function avatarColor(name) {
@@ -707,6 +776,11 @@
         if (seasons[i].winner === name) return seasons.length - 1 - i;
       }
       return seasons.length;
+    }
+    function seasonsForManager(name, since) {
+      if (!since) return seasons.length;
+      const idx = seasons.findIndex(s => s.year === since);
+      return idx >= 0 ? seasons.length - idx : seasons.length;
     }
 
     // Find manager with biggest gap between two consecutive wins
@@ -798,6 +872,21 @@
         awardsShame.push({ emoji: '🕸️', title: '18 Years, 0 Crowns', winner: 'Jawadur Rahman', detail: 'Founding member. Witnessed every title. Won none.' });
       }
 
+      // Wooden Spoon Club
+      if (neverWon.length) {
+        awardsShame.push({ emoji: '🥄', title: 'Wooden Spoon Club', winner: neverWon.map(m => m.name.split(' ')[0]).slice(0, 3).join(', '), detail: `${neverWon.length} manager${neverWon.length !== 1 ? 's' : ''} still titleless` });
+      }
+
+      // Perpetual Bridesmaid — runner-up 2+ times with only 1 win
+      if (bottleWinner && allTimeTally[bottleWinner[0]] <= 1 && bottleWinner[1] >= 2) {
+        awardsShame.push({ emoji: '💍', title: 'Perpetual Bridesmaid', winner: bottleWinner[0], detail: `${bottleWinner[1]} runner-up finishes, only ${allTimeTally[bottleWinner[0]] || 0} title` });
+      }
+
+      // One & Done
+      if (oneAndDone.length) {
+        awardsShame.push({ emoji: '📉', title: 'One & Done', winner: oneAndDone.slice(0, 2).join(', '), detail: `Won once, haven't come close since` });
+      }
+
       // Reigning drought holder
       const longestCurrentDrought = droughts.find(d => !d.neverWon);
       if (longestCurrentDrought && longestCurrentDrought.seasons > 3) {
@@ -875,7 +964,7 @@
         return `<div class="podium-card ${place}">
           <div class="podium-medal">${medals[i]}</div>
           ${renderAvatar(name)}
-          <div class="podium-name">${escapeHtml(name)}</div>
+          <div class="podium-name">${renderManagerName(name)}</div>
           <div class="podium-titles">${wins}</div>
           <div class="podium-lbl">${wins === 1 ? 'title' : 'titles'}</div>
         </div>`;
@@ -894,7 +983,7 @@
         <div class="mini-card">
           ${renderAvatar(m.name)}
           <div class="mini-name">${escapeHtml(m.name)}</div>
-          <div class="mini-stat">${seasons.length} seasons · 0 titles</div>
+          <div class="mini-stat">${seasonsForManager(m.name, m.since)} seasons · 0 titles</div>
         </div>
       `).join('');
     }
@@ -994,11 +1083,11 @@
           <div class="manager-col" title="${safeName}">
                       ${renderAvatar(name)}
                       <div>
-                        <div class="manager-name">${safeName}${streakTag}</div>
+                        <div class="manager-name">${renderManagerName(name)}${streakTag}</div>
                       </div>
                     </div>
                     <div class="wins-col">
-                                <div class="wins-trophies">${wonYears.map(year => `<span title="Won '${year}"">🏆</span>`).join('')}</div>
+                                <div class="wins-trophies">${wonYears.map(year => `<span title="Won '${escapeHtml(year)}'">🏆</span>`).join('')}</div>
                                 <div class="wins-years">${wonYears.map(y => `<span class="season-badge">${escapeHtml(y)}</span>`).join('')}</div>
                               </div>`;
         standingsEl.appendChild(row);
@@ -1150,22 +1239,38 @@
         if (!response.ok) throw new Error('Network response was not ok');
 
         const data = await response.json();
-        const top5 = data.standings.results.slice(0, 5);
+        const standingsRows = data.standings.results.map(team => ({
+          entry: team.entry,
+          playerName: team.player_name,
+          teamName: team.entry_name,
+          rank: team.rank,
+          lastRank: team.last_rank,
+          total: team.total,
+        }));
+        const newEntryRows = data.new_entries.results.map((team, index) => ({
+          entry: team.entry,
+          playerName: `${team.player_first_name} ${team.player_last_name}`,
+          teamName: team.entry_name,
+          rank: index + 1,
+          lastRank: 0,
+          total: 'New',
+        }));
+        const rows = standingsRows.length ? standingsRows.slice(0, 5) : newEntryRows;
 
         container.innerHTML = `
           <div class="live-table">
-            ${top5.map(team => {
+            ${rows.map(team => {
               // Fixed trend logic: lower rank number = better position
         let trend = '<span class="live-trend trend-flat">−</span>';
-        if (team.last_rank !== 0 && team.rank < team.last_rank) trend = '<span class="live-trend trend-up">▲</span>';
-        else if (team.last_rank !== 0 && team.rank > team.last_rank) trend = '<span class="live-trend trend-down">▼</span>';
+        if (team.lastRank !== 0 && team.rank < team.lastRank) trend = '<span class="live-trend trend-up">▲</span>';
+        else if (team.lastRank !== 0 && team.rank > team.lastRank) trend = '<span class="live-trend trend-down">▼</span>';
 
               return `
                 <div class="live-row">
                   <div class="live-rank">${team.rank}${trend}</div>
                   <div>
-                    <div class="live-manager">${escapeHtml(team.player_name)}</div>
-                    <div class="live-team">${escapeHtml(team.entry_name)}</div>
+                    <div class="live-manager"><a class="live-profile-link" href="${fplProfileUrl(team.entry)}" target="_blank" rel="noopener noreferrer">${escapeHtml(team.playerName)}</a></div>
+                    <div class="live-team">${escapeHtml(team.teamName)}</div>
                   </div>
                   <div class="live-pts">${team.total}</div>
                 </div>
