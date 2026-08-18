@@ -14,7 +14,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <style>
     :root {
@@ -134,32 +133,6 @@
       font-family: var(--mono); font-size: 9px; color: var(--muted); text-transform: uppercase;
       letter-spacing: 0.12em; margin-top: 5px;
     }
-
-    /* Timeline */
-    .timeline-section { margin-bottom: 28px; animation: fadeUp 0.6s 0.2s ease both; }
-    .timeline-scroll {
-      display: flex; gap: 8px; overflow-x: auto; padding: 8px 2px 14px;
-      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
-    }
-    .timeline-scroll::-webkit-scrollbar { height: 4px; }
-    .timeline-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    .timeline-chip {
-      flex: 0 0 auto; scroll-snap-align: start; min-width: 74px; padding: 10px 8px;
-      border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer;
-      text-align: center; transition: transform 0.15s, border-color 0.2s;
-      background: var(--surface);
-    }
-    .timeline-chip:hover { transform: translateY(-3px); border-color: rgba(0,230,118,0.4); }
-    .timeline-chip .chip-year {
-
-      font-family: var(--mono); font-size: 9px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.08em;
-    }
-    .timeline-chip .chip-name {
-        font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        background: linear-gradient(135deg, var(--gold) 0%, #c8960a 60%, var(--gold) 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      }
 
     /* Sticky filters */
     .filter-sticky-wrap {
@@ -287,19 +260,6 @@
       border: 1px solid rgba(255,215,64,0.3); background: var(--gold-dim);
       margin-left: 6px; white-space: nowrap; vertical-align: middle;
     }
-
-    /* Charts */
-    .charts-section { margin-bottom: 36px; }
-    .chart-card {
-      background: var(--surface-light);
-      border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px;
-    }
-    .chart-title {
-
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
-      color: var(--muted); text-transform: uppercase; margin-bottom: 14px;
-    }
-    .chart-wrap { position: relative; height: 240px; }
 
     /* Never won / drought */
     .side-section { margin-bottom: 36px; animation: fadeUp 0.6s 0.35s ease both; }
@@ -510,14 +470,6 @@
       </div>
     </section>
 
-    <section class="timeline-section" aria-label="Season timeline">
-      <div class="section-header">
-        <h2 class="section-label">Timeline</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="timeline-scroll" id="timeline" role="list"></div>
-    </section>
-
     <div class="filter-sticky-wrap" id="filter-sticky">
       <div class="filter-bar" role="tablist" aria-label="Filter standings">
         <button type="button" id="tab-all" class="filter-btn active" data-mode="all" role="tab" aria-controls="standings-panel" aria-selected="true">All Time</button>
@@ -553,17 +505,6 @@
         <div class="section-line"></div>
       </div>
       <div class="history-grid" id="history"></div>
-    </section>
-
-    <section class="charts-section" aria-label="League charts">
-      <div class="section-header">
-        <h2 class="section-label">Stats</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-title">Cumulative titles — all-time top 3</div>
-        <div class="chart-wrap"><canvas id="chart-cumulative" aria-label="Cumulative titles over time"></canvas></div>
-      </div>
     </section>
 
     <section class="side-section" id="never-won-section" aria-label="Managers without a title">
@@ -676,9 +617,6 @@
     let colorIdx = 0;
     let lightboxIndex = 0;
     let lightboxReturnFocus = null;
-    let chartCumulative;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     // Build managers roster from winners + extras
     const managerByName = new Map();
     seasons.forEach(s => {
@@ -877,11 +815,6 @@
         awardsShame.push({ emoji: '🥄', title: 'Wooden Spoon Club', winner: neverWon.map(m => m.name.split(' ')[0]).slice(0, 3).join(', '), detail: `${neverWon.length} manager${neverWon.length !== 1 ? 's' : ''} still titleless` });
       }
 
-      // Perpetual Bridesmaid — runner-up 2+ times with only 1 win
-      if (bottleWinner && allTimeTally[bottleWinner[0]] <= 1 && bottleWinner[1] >= 2) {
-        awardsShame.push({ emoji: '💍', title: 'Perpetual Bridesmaid', winner: bottleWinner[0], detail: `${bottleWinner[1]} runner-up finishes, only ${allTimeTally[bottleWinner[0]] || 0} title` });
-      }
-
       // One & Done
       if (oneAndDone.length) {
         awardsShame.push({ emoji: '📉', title: 'One & Done', winner: oneAndDone.slice(0, 2).join(', '), detail: `Won once, haven't come close since` });
@@ -911,45 +844,6 @@
         neverWon, droughts, awardsFame, awardsShame,
         latestWinner, bottleLeader,
       };
-    }
-
-    function updateCharts() {
-      if (typeof Chart === 'undefined') return;
-
-      const chartDefaults = {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: prefersReducedMotion ? false : { duration: 400 },
-
-        plugins: { legend: { labels: { color: '#4a5568', font: { family: "'JetBrains Mono', monospace", size: 10 } } } },
-        scales: {
-          x: { ticks: { color: '#4a5568', font: { size: 10 } }, grid: { color: 'rgba(30,38,54,0.5)' } },
-          y: { ticks: { color: '#4a5568', font: { size: 10 } }, grid: { color: 'rgba(30,38,54,0.5)' } },
-        },
-      };
-
-      const top3 = Object.entries(
-        seasons.reduce((acc, s) => { acc[s.winner] = (acc[s.winner] || 0) + 1; return acc; }, {})
-      ).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([n]) => n);
-
-      const cumDatasets = top3.map(name => {
-        let cum = 0;
-        return {
-          label: name.split(' ')[0],
-          data: seasons.map(s => { if (s.winner === name) cum++; return cum; }),
-          borderColor: avatarColor(name)[0],
-          backgroundColor: 'transparent',
-          tension: 0.2,
-          pointRadius: 2,
-        };
-      });
-
-      if (chartCumulative) chartCumulative.destroy();
-      chartCumulative = new Chart(document.getElementById('chart-cumulative'), {
-        type: 'line',
-        data: { labels: seasons.map(s => s.year), datasets: cumDatasets },
-        options: chartDefaults,
-      });
     }
 
     function renderPodium(sorted) {
@@ -1014,25 +908,6 @@
       `).join('');
     }
 
-    function buildTimeline() {
-      const el = document.getElementById('timeline');
-      el.innerHTML = seasons.map((s, i) => ({ s, i })).reverse().map(({ s, i }) => {
-        const [bg] = avatarColor(s.winner);
-        const first = s.winner.split(' ')[0];
-        return `<button type="button" class="timeline-chip" data-index="${i}" role="listitem"
-          style="border-top: 3px solid ${bg}" aria-label="${s.year} winner ${s.winner}">
-          <div class="chip-year">${escapeHtml(s.year)}</div>
-          <div class="chip-name">${escapeHtml(first)}</div>
-        </button>`;
-      }).join('');
-
-      el.addEventListener('click', e => {
-        const chip = e.target.closest('.timeline-chip');
-        if (!chip) return;
-        openLightboxAt(+chip.dataset.index);
-      });
-    }
-
     function updateView(mode, btn) {
       document.querySelectorAll('.filter-btn').forEach(b => {
         b.classList.remove('active');
@@ -1063,7 +938,6 @@
       `;
 
       renderPodium(stats.sorted);
-      updateCharts();
 
       const standingsEl = document.getElementById('standings');
       standingsEl.innerHTML = '';
@@ -1316,7 +1190,6 @@
     function init() {
       setupFplLink();
       injectJsonLd();
-      buildTimeline();
       buildHistory();
       setupStickyFilter();
 
@@ -1347,8 +1220,7 @@
       });
 
       const start = () => updateView('all', document.getElementById('tab-all'));
-      if (typeof Chart !== 'undefined') start();
-      else window.addEventListener('load', start);
+      start();
     }
 
     init();
