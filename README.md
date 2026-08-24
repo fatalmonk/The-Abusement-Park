@@ -30,7 +30,28 @@ Edit the config block in `index.html` (search for `Config`):
 
 **Screenshots:** Save PNGs in `/images/` matching each `img` path (e.g. `images/2026.png`).
 
-**Deploy:** Push to `main` → GitHub Pages updates [fatalmonk.github.io/The-Abusement-Park](https://fatalmonk.github.io/The-Abusement-Park/).
+## Cloudflare Pages
+
+The live standings are served by the Pages Function at `/api/standings`. It
+fetches league `113546` directly from FPL, validates the response, and caches
+successful results at the edge for two minutes. The browser no longer depends
+on a public CORS proxy.
+
+Run the complete site locally with:
+
+```sh
+npx wrangler pages dev .
+```
+
+Then open the URL printed by Wrangler. After authenticating Wrangler, deploy
+with:
+
+```sh
+npx wrangler pages deploy .
+```
+
+Failed FPL requests display an explicit unavailable state instead of presenting
+hard-coded rows as live data.
 
 ## License
 MIT License.
