@@ -195,12 +195,12 @@
     .stat:nth-child(6) .stat-val { font-size: clamp(20px, 2.4vw, 27px); white-space: nowrap; }
     .stat-old-guards { padding: 10px 8px; }
     .old-guards-list {
-      width: 100%; display: grid; gap: 2px;
-      font-family: var(--mono); font-size: 9px; line-height: 1.15;
+      width: auto; display: grid; grid-template-columns: repeat(2, max-content); gap: 6px 12px;
+      justify-content: center;
+      font-family: var(--display); font-size: 14px; line-height: 1;
     }
     .old-guard-item {
-      display: block;
-      align-items: center; gap: 3px; text-align: left;
+      display: flex; align-items: center; justify-content: center; text-align: center;
     }
     .old-guard-rank { color: var(--muted); }
     .old-guard-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
@@ -512,8 +512,7 @@
       .stats-bar .stat-val { font-size: 25px; }
       .stats-bar .stat-lbl { font-size: 8px; line-height: 1.2; }
       .stats-bar .stat-old-guards { padding: 5px 7px; }
-      .stats-bar .old-guards-list { gap: 0; font-size: 7.5px; line-height: 1.05; }
-      .stats-bar .old-guard-item { grid-template-columns: 10px minmax(0, 1fr) auto; gap: 2px; }
+      .stats-bar .old-guards-list { gap: 4px 6px; font-size: 11px; line-height: 1; }
       .stats-bar .stat-old-guards .stat-lbl { margin-top: 2px; }
       .table-head, .row { grid-template-columns: 40px 1fr 200px; padding: 10px 12px; }
       .avatar { width: 32px; height: 32px; font-size: 12px; }
@@ -677,6 +676,12 @@
         0 16px 38px rgba(0,0,0,0.18);
       backdrop-filter: blur(22px) saturate(1.35);
       -webkit-backdrop-filter: blur(22px) saturate(1.35);
+    }
+    .podium-card.place-1 {
+      background:
+        radial-gradient(circle at 16% 0%, rgba(255,255,255,0.88), transparent 36%),
+        linear-gradient(145deg, rgba(255,255,255,0.68), rgba(235,241,249,0.48)),
+        rgba(238,243,250,0.54);
     }
     .stat:hover,
     .podium-card:hover,
@@ -877,10 +882,10 @@
 
     const FPL_PROFILE_BASE = 'https://fantasy.premierleague.com/entry';
     const OLD_GUARDS = [
-      { name: 'Arka Basak' },
-      { name: 'Jawadur Rahman' },
-      { name: 'MAC Alvi' },
-      { name: 'Irfan Ahmed' },
+      { name: 'Arka Basak', displayName: 'Arka' },
+      { name: 'Jawadur Rahman', displayName: 'Jawad' },
+      { name: 'MAC Alvi', displayName: 'Alvi' },
+      { name: 'Irfan Ahmed', displayName: 'Irfan' },
     ];
     const CURRENT_LEAGUE_PLAYERS = [
       { entry: 5210060, name: 'Salvi Ali', team: 'Walangas', careerBestPct: '0.6%', careerBestSeason: '2011/12', careerAvgPct: '16.9%', seasons: 14 },
@@ -1176,7 +1181,7 @@
         .join(' & ');
       const oldGuardTitle = OLD_GUARDS.map(manager => manager.name).join('\n');
       const oldGuardRows = OLD_GUARDS.map(manager => {
-        return `<div class="old-guard-item"><span class="old-guard-name">${escapeHtml(manager.name)}</span></div>`;
+        return `<div class="old-guard-item"><span class="old-guard-name">${escapeHtml(manager.displayName)}</span></div>`;
       }).join('');
       document.getElementById('stats-bar').innerHTML = `
         <div class="stat"><div class="stat-val">${stats.total}</div><div class="stat-lbl">Seasons</div></div>
@@ -1184,7 +1189,7 @@
         <div class="stat"><div class="stat-val">${escapeHtml(stats.latestWinner)}</div><div class="stat-lbl">Reigning Champ</div></div>
         <div class="stat" title="${escapeHtml(bottleTitle)}"><div class="stat-val">${escapeHtml(bottleFirst)}</div><div class="stat-lbl">Chief Bottler</div></div>
         <div class="stat" title="${escapeHtml(mostTitleLeaders)} · ${mostTitleCount} title${mostTitleCount !== 1 ? 's' : ''} each"><div class="stat-val">${escapeHtml(mostTitleFirstNames)} - ${mostTitleCount}</div><div class="stat-lbl">Most Titles</div></div>
-        <div class="stat stat-old-guards" title="${escapeHtml(oldGuardTitle)}" aria-label="Old Guards"><div class="old-guards-list">${oldGuardRows}</div><div class="stat-lbl">Old Guards</div></div>
+        <div class="stat stat-old-guards" title="${escapeHtml(oldGuardTitle)}" aria-label="The OGs"><div class="old-guards-list">${oldGuardRows}</div><div class="stat-lbl">THE OG's</div></div>
       `;
 
       renderPodium(stats.sorted);
@@ -1401,11 +1406,12 @@
     function renderLiveRows(rows, expanded = false) {
       const visibleRows = expanded ? rows : rows.slice(0, 5);
       const hiddenCount = Math.max(rows.length - 5, 0);
+      const currentMonth = new Intl.DateTimeFormat('en', { month: 'long' }).format(new Date());
       return `
         <div class="live-table">
           <div class="live-table-head" aria-hidden="true">
             <span></span><span></span>
-            <div class="live-score-head"><span>Month</span><span>GW</span><span>Season</span></div>
+            <div class="live-score-head"><span>${currentMonth}</span><span>GW</span><span>Season</span></div>
           </div>
           ${visibleRows.map(renderLiveRow).join('')}
           ${hiddenCount ? `<button type="button" class="live-toggle" aria-expanded="${expanded}" data-live-toggle>${expanded ? 'Show top 5' : `Show ${hiddenCount} more`}</button>` : ''}
