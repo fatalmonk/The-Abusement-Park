@@ -22,3 +22,9 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Node and test artifacts
+node_modules/
+coverage/
+playwright-report/
+test-results/
