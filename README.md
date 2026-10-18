@@ -30,6 +30,46 @@ Edit the config block in `index.html` (search for `Config`):
 
 **Screenshots:** Save PNGs in `/images/` matching each `img` path (e.g. `images/2026.png`).
 
+## Local development and testing
+
+Requirements:
+
+- Node.js 22 LTS
+- npm
+
+Install the pinned dependencies and the Chromium browser used by Playwright:
+
+```sh
+npm ci
+npm run test:e2e:install
+```
+
+Run the local Cloudflare Pages application:
+
+```sh
+npx wrangler pages dev .
+```
+
+Run the validation commands:
+
+```sh
+npm run lint
+npm run test
+npm run test:coverage
+npm run test:e2e
+SMOKE_BASE_URL=https://your-preview.example npm run test:smoke
+npm run build
+npm run check
+```
+
+This static application has no compilation step. `npm run build` performs static application validation instead of producing a synthetic build artifact. `npm run check` runs the essential non-browser quality gates; browser tests run separately because they start Wrangler and Chromium. `npm run test:smoke` verifies a deployed Cloudflare preview without calling the live FPL upstream.
+
+Tests use small deterministic fixtures under `tests/fixtures/`. CI must not call the live FPL API or assert volatile rankings, deadlines, points, or manager counts. Coverage output is written to `coverage/`, with risk-based thresholds focused on the Cloudflare API Function.
+
+The dedicated `.github/workflows/ci.yml` workflow validates pull requests and `main` without deploying. The legacy GitHub Pages workflow is manual-only because GitHub Pages cannot execute `functions/api/standings.js`; production continues to use Cloudflare Pages. Repository administrators must configure `main` branch protection to require `Lint, test, and coverage` plus both browser-regression shard checks before merging.
+
+Known limitations and the accessibility baseline are documented in [`docs/testing-baseline.md`](docs/testing-baseline.md).
+
 ## Cloudflare Pages
 
 The live standings are served by the Pages Function at `/api/standings`. It
