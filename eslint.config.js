@@ -2,7 +2,7 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
-    files: ['functions/**/*.js', 'scripts/**/*.mjs', 'tests/**/*.js', '*.config.js'],
+    files: ['functions/**/*.js', 'public/scripts/**/*.js', 'scripts/**/*.mjs', 'tests/**/*.js', '*.config.js'],
     languageOptions: {
       ecmaVersion: 2024,
       sourceType: 'module',

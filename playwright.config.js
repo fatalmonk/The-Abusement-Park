@@ -23,7 +23,7 @@ export default defineConfig({
     { name: 'desktop', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 } } }
   ],
   webServer: {
-    command: `npx wrangler pages dev . --port ${port}`,
+    command: `npx wrangler pages dev public --port ${port}`,
     url: `http://127.0.0.1:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000

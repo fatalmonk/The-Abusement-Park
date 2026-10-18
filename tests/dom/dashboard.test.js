@@ -3,7 +3,7 @@ import { JSDOM } from 'jsdom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { loadHistoricalApp } from '../helpers/load-historical-app.js';
 
-const html = readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('../../public/index.html', import.meta.url), 'utf8');
 
 function setupDom(fetchImpl = vi.fn()) {
   const dom = new JSDOM(html, { url: 'https://example.test/' });

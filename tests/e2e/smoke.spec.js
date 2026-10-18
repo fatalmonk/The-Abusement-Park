@@ -50,6 +50,14 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
+test('homepage visual baseline matches', async ({ page }) => {
+  await expect(page.locator('#live-widget-content .live-row')).toHaveCount(2);
+  await expect(page).toHaveScreenshot('homepage.png', {
+    fullPage: true,
+    animations: 'disabled'
+  });
+});
+
 test('homepage, historical filters, and deterministic live standings work', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1, name: 'The Abusement Park' })).toBeVisible();
   await expect(page.locator('#history .history-card')).toHaveCount(18);
