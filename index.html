@@ -1328,7 +1328,7 @@
         card.addEventListener('click', () => openLightboxAt(idx));
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
-        card.setAttribute('aria-label', `View ${s.year} won by ${s.winner}`);
+        card.setAttribute('aria-label', `View season details · ${s.year} · ${s.winner.split(' ')[0]}`);
         card.innerHTML = `
           <div class="trophy-icon" aria-hidden="true">🏆</div>
           <div class="history-season">${escapeHtml(s.year)}</div>

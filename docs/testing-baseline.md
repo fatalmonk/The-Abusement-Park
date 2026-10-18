@@ -7,7 +7,7 @@ Verified against `origin/main` at merge commit `9ba7965` before implementation:
 - [x] Phase 0 audit documents are present on `main`.
 - [x] Historical records remain embedded in `index.html`; no records changed.
 - [x] `/api/standings` remains a Cloudflare Pages Function with the existing response contract.
-- [x] Existing GitHub Pages workflow remains present and unchanged.
+- [x] Preserve the legacy GitHub Pages workflow as a manual-only fallback so pushes cannot deploy around CI.
 - [x] Add deterministic unit coverage for historical calculations.
 - [x] Characterize current FPL API success, failure, cache, and method behavior.
 - [x] Add DOM regression coverage without redesigning application behavior.
@@ -33,7 +33,7 @@ Historical regression coverage includes title totals, last-five and last-ten fil
 
 API coverage includes success, empty standings, cache HIT/MISS, missing bootstrap data, missing or failed manager history, network failure, non-2xx responses, invalid JSON, invalid mandatory structures, malformed manager records, response shape stability, cache headers, and 405/Allow behavior.
 
-DOM and browser coverage includes dashboard rendering, filters, podium, leaderboard, archive cards, missing screenshots, live loading/success/unavailable states, profile links, expand/collapse, dialog keyboard behavior, focus restoration, JavaScript exceptions, and horizontal overflow.
+DOM and browser coverage includes dashboard rendering, filters, podium, leaderboard, archive cards, missing screenshots, live loading/success/unavailable states, profile links, expand/collapse, dialog keyboard behavior, focus restoration, JavaScript exceptions, horizontal overflow, local Wrangler route integration, and a Cloudflare branch-preview smoke check.
 
 ## Fixture design
 
@@ -56,11 +56,12 @@ The initial verified run exceeded each threshold. Inline historical code is prot
 
 Automated axe checks run at 320 × 568, 390 × 844, 768 × 1024, and 1440 × 900. Automated checks do not establish WCAG 2.2 AA compliance.
 
-Existing finding, narrowly baselined:
+Accessibility status:
 
-- `label-content-name-mismatch` on season archive cards. Each card's `aria-label` includes the full winner name while the visible card includes only the winner's first name. This is an existing serious axe finding and is deferred to the accessibility implementation PR.
+- No critical or serious axe violations are accepted by the browser regression gate.
+- Moderate findings remain outside this PR's failure threshold and are reported in the attached axe results.
 
-Every axe result is attached to the corresponding Playwright test result. All other critical or serious violations fail the suite. No broad rule suppression is used.
+Every axe result is attached to the corresponding Playwright test result. Automated checks are a regression gate, not a claim of full WCAG conformance.
 
 ## Known existing defects and limitations
 
@@ -70,7 +71,8 @@ Every axe result is attached to the corresponding Playwright test result. All ot
 - Some manager metrics remain manually maintained in the frontend.
 - The current Function has no upstream timeout, concurrency limit, or stale-on-error strategy. Those changes are reserved for PR 3.
 - Month display derives from the current calendar date; tests avoid volatile assertions around that label.
-- GitHub Pages can host the static page but cannot execute the Cloudflare Pages Function. The existing deployment workflow is preserved pending an explicit hosting decision.
+- The legacy GitHub Pages workflow is manual-only because it cannot execute the Cloudflare Pages Function.
+- `main` branch protection must require all CI checks; this repository setting is verified separately from source-controlled workflow configuration.
 - Manual screen-reader, zoom/reflow, and complete keyboard audits remain necessary.
 
 ## Remaining testing gaps
@@ -83,4 +85,4 @@ Every axe result is attached to the corresponding Playwright test result. All ot
 
 ## Recommended PR 2 prerequisites
 
-PR 2 can proceed once this workflow is required for pull requests to `main`. Keep historical changes separate, use these regression tests to prove equivalence, and resolve the documented archive-card accessible-name issue in the dedicated accessibility scope. API resilience and cache architecture should remain in PR 3.
+PR 2 can proceed once this workflow is required for pull requests to `main`. Keep historical changes separate and use these regression tests to prove equivalence. API resilience and cache architecture should remain in PR 3.

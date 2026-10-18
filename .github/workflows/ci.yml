@@ -80,6 +80,16 @@ jobs:
       - name: Run Playwright shard
         run: npm run test:e2e -- --shard=${{ matrix.shard }}
 
+      - name: Resolve Cloudflare preview URL
+        if: matrix.shard == '1/2' && github.event_name == 'pull_request'
+        run: |
+          preview_slug="$(printf '%s' "$GITHUB_HEAD_REF" | tr '[:upper:]_/' '[:lower:]--')"
+          echo "SMOKE_BASE_URL=https://${preview_slug}.the-abusement-park.pages.dev" >> "$GITHUB_ENV"
+
+      - name: Run Cloudflare preview smoke
+        if: matrix.shard == '1/2' && github.event_name == 'pull_request'
+        run: npm run test:smoke
+
       - name: Upload Playwright artifacts
         if: always()
         uses: actions/upload-artifact@v4

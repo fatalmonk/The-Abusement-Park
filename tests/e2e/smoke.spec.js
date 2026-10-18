@@ -91,18 +91,25 @@ test('page has no JavaScript exceptions or horizontal overflow', async ({ page }
   expect(exceptions).toEqual([]);
 });
 
-test('automated accessibility baseline has no unexpected critical or serious violations', async ({ page }, testInfo) => {
+test('local Cloudflare Pages routing reaches the standings Function', async ({ request }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'One route integration check is sufficient.');
+
+  const response = await request.post('/api/standings');
+  expect(response.status()).toBe(405);
+  expect(response.headers().allow).toBe('GET');
+  await expect(response.json()).resolves.toEqual({ error: 'Method not allowed.' });
+});
+
+test('automated accessibility baseline has no critical or serious violations', async ({ page }, testInfo) => {
   const results = await new AxeBuilder({ page }).analyze();
-  const knownExisting = new Set(['label-content-name-mismatch']);
-  const unexpectedSevere = results.violations.filter((violation) =>
-    ['critical', 'serious'].includes(violation.impact) && !knownExisting.has(violation.id)
+  const severe = results.violations.filter((violation) =>
+    ['critical', 'serious'].includes(violation.impact)
   );
   await testInfo.attach('axe-results', {
     body: JSON.stringify(results.violations, null, 2),
     contentType: 'application/json'
   });
 
-  // Existing findings are documented in docs/testing-baseline.md. This gate
-  // blocks new high-impact regressions without implying full WCAG conformance.
-  expect(unexpectedSevere).toEqual([]);
+  // Automated checks are a regression gate, not a claim of full WCAG conformance.
+  expect(severe).toEqual([]);
 });
