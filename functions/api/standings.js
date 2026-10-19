@@ -2,6 +2,7 @@ const LEAGUE_ID = '113546';
 const FPL_STANDINGS_URL = `https://fantasy.premierleague.com/api/leagues-classic/${LEAGUE_ID}/standings/`;
 const FPL_BOOTSTRAP_URL = 'https://fantasy.premierleague.com/api/bootstrap-static/';
 const FPL_ENTRY_BASE_URL = 'https://fantasy.premierleague.com/api/entry';
+const FPL_EVENT_BASE_URL = 'https://fantasy.premierleague.com/api/event';
 const CACHE_SECONDS = 120;
 
 const JSON_HEADERS = {
@@ -79,19 +80,57 @@ function careerProfile(past) {
   };
 }
 
-async function buildManagerMetrics(data, events) {
+async function buildManagerMetrics(data, events, bootstrap = {}) {
   const entryIds = [...new Set([
     ...data.standings.results.map(team => team.entry),
     ...data.new_entries.results.map(team => team.entry),
   ])];
 
   const monthEventIds = currentMonthEventIds(events);
+  const currentEvent = events.find(event => event.is_current)?.id
+    ?? events.filter(event => event.finished).at(-1)?.id
+    ?? null;
+  const playersById = new Map((bootstrap.elements || []).map(player => [player.id, player]));
+  const teamsById = new Map((bootstrap.teams || []).map(team => [team.id, team.short_name]));
+  let livePoints = new Map();
+
+  if (currentEvent) {
+    try {
+      const live = await fetchFplJson(`${FPL_EVENT_BASE_URL}/${currentEvent}/live/`);
+      livePoints = new Map((live.elements || []).map(player => [player.id, player.stats?.total_points ?? 0]));
+    } catch {
+      // Manager history remains available when live event data is unavailable.
+    }
+  }
 
   const metrics = await Promise.all(entryIds.map(async entry => {
     try {
       const history = await fetchFplJson(`${FPL_ENTRY_BASE_URL}/${entry}/history/`);
       const current = Array.isArray(history.current) ? history.current : [];
       const latest = current.at(-1);
+      let squad = [];
+      if (currentEvent) {
+        try {
+          const picks = await fetchFplJson(`${FPL_ENTRY_BASE_URL}/${entry}/event/${currentEvent}/picks/`);
+          squad = (picks.picks || []).map(pick => {
+            const player = playersById.get(pick.element) || {};
+            const multiplier = pick.multiplier ?? 0;
+            return {
+              id: pick.element,
+              name: player.web_name || `Player ${pick.element}`,
+              team: teamsById.get(player.team) || '',
+              position: player.element_type || null,
+              slot: pick.position,
+              points: (livePoints.get(pick.element) ?? 0) * multiplier,
+              multiplier,
+              captain: Boolean(pick.is_captain),
+              viceCaptain: Boolean(pick.is_vice_captain),
+            };
+          });
+        } catch {
+          // A single private or unavailable team should not block league standings.
+        }
+      }
       const month = current.length
         ? current.filter(row => monthEventIds.has(row.event)).reduce((sum, row) => sum + row.points, 0)
         : null;
@@ -100,6 +139,7 @@ async function buildManagerMetrics(data, events) {
         gameweek: latest?.points ?? null,
         season: latest?.total_points ?? null,
         event: latest?.event ?? null,
+        squad,
         ...careerProfile(history.past),
       }];
     } catch {
@@ -167,14 +207,15 @@ export async function onRequestGet(context) {
   }
 
   let events = [];
+  let bootstrap = {};
   try {
-    const bootstrap = await fetchFplJson(FPL_BOOTSTRAP_URL);
+    bootstrap = await fetchFplJson(FPL_BOOTSTRAP_URL);
     events = Array.isArray(bootstrap.events) ? bootstrap.events : [];
   } catch {
     // Standings remain available even if FPL's event schedule is temporarily unavailable.
   }
 
-  const managerMetrics = await buildManagerMetrics(data, events);
+  const managerMetrics = await buildManagerMetrics(data, events, bootstrap);
 
   const response = json({
     ...data,
