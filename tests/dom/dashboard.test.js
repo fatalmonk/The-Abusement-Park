@@ -75,6 +75,10 @@ describe('live standings DOM behavior', () => {
     expect(container.querySelectorAll('.live-row')).toHaveLength(5);
     expect(container.querySelector('[data-live-toggle]').getAttribute('aria-expanded')).toBe('false');
     expect(container.querySelector('a').href).toBe('https://fantasy.premierleague.com/entry/100/history');
+    expect(container.querySelector('.live-identity')).not.toBeNull();
+    expect(container.querySelector('.live-performance')).not.toBeNull();
+    expect(container.querySelector('.live-actions')).not.toBeNull();
+    expect(container.querySelector('.live-trend svg')).not.toBeNull();
 
     container.querySelector('[data-live-toggle]').click();
     expect(container.querySelectorAll('.live-row')).toHaveLength(7);
@@ -107,6 +111,30 @@ describe('live standings DOM behavior', () => {
     expect(container.querySelectorAll('.live-player')).toHaveLength(5);
     expect(container.querySelector('.live-player-captain').textContent).toContain('16');
     expect(container.querySelector('.live-squad-bench').textContent).toContain('Benched');
+  });
+
+  it('labels projected outgoing and incoming players', () => {
+    const { app } = setupDom();
+    const container = document.createElement('div');
+    const squad = [
+      { id: 1, name: 'Missing', team: 'ARS', position: 2, slot: 2, points: 0, multiplier: 0, projectedOut: true },
+      { id: 2, name: 'First Sub', team: 'MCI', position: 3, slot: 12, points: 5, multiplier: 1, projectedIn: true, replaces: 1 }
+    ];
+
+    app.renderLiveStandings(container, [{
+      entry: 100, playerName: 'Test Manager', teamName: 'Test FC', rank: 1, lastRank: 1,
+      month: 20, gameweek: 20, season: 100, squad
+    }]);
+    container.querySelector('[data-squad-toggle]').click();
+
+    expect(container.querySelector('.live-player-sub-out').textContent).toContain('Missing');
+    expect(container.querySelector('.live-player-sub-out').textContent).toContain('OUT');
+    expect(container.querySelector('.live-player-sub-out').closest('.live-squad-bench')).not.toBeNull();
+    expect(container.querySelector('.live-player-sub-in').textContent).toContain('First Sub');
+    expect(container.querySelector('.live-player-sub-in').textContent).toContain('IN');
+    expect(container.querySelector('.live-player-sub-in').closest('.live-squad-pitch')).not.toBeNull();
+    expect(container.querySelector('.live-projected-note').textContent).toContain('Projected');
+    expect(container.querySelector('[aria-label="Projected substitute in"] svg')).not.toBeNull();
   });
 
   it('renders the characterized unavailable state after API failure', async () => {

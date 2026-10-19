@@ -40,6 +40,7 @@ function installUpstream({
   histories = managerHistories,
   picks = managerPicks,
   live = liveFixture,
+  fixtures = [],
   standingsResponse,
   bootstrapResponse
 } = {}) {
@@ -48,6 +49,7 @@ function installUpstream({
     if (url.includes('/leagues-classic/')) return standingsResponse ?? jsonResponse(clone(standings));
     if (url.includes('/bootstrap-static/')) return bootstrapResponse ?? jsonResponse(clone(bootstrap));
     if (url.includes('/event/') && url.endsWith('/live/')) return jsonResponse(clone(live));
+    if (url.includes('/fixtures/')) return jsonResponse(clone(fixtures));
     const picksMatch = url.match(/\/entry\/(.+?)\/event\/(.+?)\/picks/);
     if (picksMatch) return jsonResponse(clone(picks[picksMatch[1]] ?? { picks: [] }));
     const entry = url.match(/\/entry\/(.+?)\/history/)?.[1];
@@ -215,6 +217,218 @@ describe('upstream failure contract', () => {
     const response = await onRequestGet(createContext());
     expect(response.status).toBe(502);
     expect(await response.json()).toEqual({ error: 'FPL standings are temporarily unavailable.' });
+  });
+
+  it('projects the first eligible bench player after a starter finishes without appearing', async () => {
+    const elements = [
+      { id: 1, web_name: 'Keeper', element_type: 1, team: 1 },
+      { id: 2, web_name: 'Def One', element_type: 2, team: 1 },
+      { id: 3, web_name: 'Def Two', element_type: 2, team: 1 },
+      { id: 4, web_name: 'Def Three', element_type: 2, team: 1 },
+      { id: 5, web_name: 'Def Missing', element_type: 2, team: 1 },
+      { id: 6, web_name: 'Mid One', element_type: 3, team: 1 },
+      { id: 7, web_name: 'Mid Two', element_type: 3, team: 1 },
+      { id: 8, web_name: 'Mid Three', element_type: 3, team: 1 },
+      { id: 9, web_name: 'Mid Four', element_type: 3, team: 1 },
+      { id: 10, web_name: 'Forward One', element_type: 4, team: 1 },
+      { id: 11, web_name: 'Forward Two', element_type: 4, team: 1 },
+      { id: 12, web_name: 'Bench Keeper', element_type: 1, team: 1 },
+      { id: 13, web_name: 'Bench Mid', element_type: 3, team: 1 },
+      { id: 14, web_name: 'Bench Def', element_type: 2, team: 1 },
+      { id: 15, web_name: 'Bench Forward', element_type: 4, team: 1 }
+    ];
+    const picks = elements.map((player, index) => ({
+      element: player.id,
+      position: index + 1,
+      multiplier: index < 11 ? 1 : 0,
+      is_captain: false,
+      is_vice_captain: false
+    }));
+    const live = { elements: elements.map(player => ({
+      id: player.id,
+      stats: { total_points: player.id === 13 ? 5 : 2, minutes: player.id === 5 ? 0 : 90 }
+    })) };
+    installUpstream({
+      bootstrap: { ...bootstrapFixture, elements, teams: [{ id: 1, short_name: 'TST' }] },
+      picks: { 101: { picks }, 202: { picks: [] } },
+      live,
+      fixtures: [{ team_h: 1, team_a: 2, finished: true }]
+    });
+
+    const { onRequestGet } = await loadModule();
+    const body = await (await onRequestGet(createContext())).json();
+    const squad = body.meta.managerMetrics[101].squad;
+
+    expect(squad.find(player => player.id === 5)).toMatchObject({ multiplier: 0, projectedOut: true, points: 0 });
+    expect(squad.find(player => player.id === 13)).toMatchObject({ multiplier: 1, projectedIn: true, replaces: 5, points: 5 });
+  });
+
+  it('respects bench order while preserving a legal formation', async () => {
+    const positions = [1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 1, 4, 2, 3];
+    const elements = positions.map((position, index) => ({
+      id: index + 1, web_name: `Player ${index + 1}`, element_type: position, team: 1
+    }));
+    const picks = elements.map((player, index) => ({
+      element: player.id, position: index + 1, multiplier: index < 11 ? 1 : 0,
+      is_captain: false, is_vice_captain: false
+    }));
+    const live = { elements: elements.map(player => ({
+      id: player.id,
+      stats: { total_points: player.id === 13 ? 8 : player.id === 14 ? 6 : 2, minutes: player.id === 2 ? 0 : 90 }
+    })) };
+    installUpstream({
+      bootstrap: { ...bootstrapFixture, elements, teams: [{ id: 1, short_name: 'TST' }] },
+      picks: { 101: { picks }, 202: { picks: [] } },
+      live,
+      fixtures: [{ team_h: 1, team_a: 2, finished: true }]
+    });
+
+    const { onRequestGet } = await loadModule();
+    const body = await (await onRequestGet(createContext())).json();
+    const squad = body.meta.managerMetrics[101].squad;
+
+    expect(squad.find(player => player.id === 13)).not.toHaveProperty('projectedIn');
+    expect(squad.find(player => player.id === 14)).toMatchObject({ projectedIn: true, replaces: 2 });
+  });
+
+  it('does not skip a higher-priority substitute whose fixture is still pending', async () => {
+    const positions = [1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 1, 3, 2, 4];
+    const teams = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3];
+    const elements = positions.map((position, index) => ({
+      id: index + 1, web_name: `Player ${index + 1}`, element_type: position, team: teams[index]
+    }));
+    const picks = elements.map((player, index) => ({
+      element: player.id, position: index + 1, multiplier: index < 11 ? 1 : 0,
+      is_captain: false, is_vice_captain: false
+    }));
+    const live = { elements: elements.map(player => ({
+      id: player.id,
+      stats: {
+        total_points: player.id === 13 ? 0 : player.id === 14 ? 6 : 2,
+        minutes: player.id === 5 || player.id === 13 ? 0 : 90
+      }
+    })) };
+    installUpstream({
+      bootstrap: {
+        ...bootstrapFixture,
+        elements,
+        teams: [{ id: 1, short_name: 'ONE' }, { id: 2, short_name: 'TWO' }, { id: 3, short_name: 'THR' }]
+      },
+      picks: { 101: { picks }, 202: { picks: [] } },
+      live,
+      fixtures: [
+        { team_h: 1, team_a: 3, finished: true },
+        { team_h: 2, team_a: 4, finished: false }
+      ]
+    });
+
+    const { onRequestGet } = await loadModule();
+    const body = await (await onRequestGet(createContext())).json();
+    const squad = body.meta.managerMetrics[101].squad;
+
+    expect(squad.find(player => player.id === 14)).not.toHaveProperty('projectedIn');
+    expect(squad.some(player => player.projectedIn || player.projectedOut)).toBe(false);
+  });
+
+  it('promotes the vice-captain multiplier when the captain is confirmed absent', async () => {
+    const positions = [1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 1, 3, 2, 4];
+    const elements = positions.map((position, index) => ({
+      id: index + 1, web_name: `Player ${index + 1}`, element_type: position, team: 1
+    }));
+    const picks = elements.map((player, index) => ({
+      element: player.id,
+      position: index + 1,
+      multiplier: index === 4 ? 2 : index < 11 ? 1 : 0,
+      is_captain: index === 4,
+      is_vice_captain: index === 5
+    }));
+    const live = { elements: elements.map(player => ({
+      id: player.id,
+      stats: { total_points: player.id === 6 ? 7 : player.id === 13 ? 5 : 2, minutes: player.id === 5 ? 0 : 90 }
+    })) };
+    installUpstream({
+      bootstrap: { ...bootstrapFixture, elements, teams: [{ id: 1, short_name: 'TST' }] },
+      picks: { 101: { picks, entry_history: { event_transfers_cost: 4 } }, 202: { picks: [] } },
+      live,
+      fixtures: [{ team_h: 1, team_a: 2, finished: true }]
+    });
+
+    const { onRequestGet } = await loadModule();
+    const body = await (await onRequestGet(createContext())).json();
+    const metric = body.meta.managerMetrics[101];
+
+    expect(metric.squad.find(player => player.id === 5)).toMatchObject({ multiplier: 0, projectedOut: true });
+    expect(metric.squad.find(player => player.id === 6)).toMatchObject({ multiplier: 2, points: 14, viceCaptain: true });
+    expect(metric.squad.find(player => player.id === 13)).toMatchObject({ multiplier: 1, points: 5, projectedIn: true });
+    expect(metric.gameweek).toBe(metric.squad.reduce((sum, player) => sum + player.points, 0) - 4);
+  });
+
+  it('uses only the substitute goalkeeper for a missing goalkeeper', async () => {
+    const positions = [1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 1, 4, 2, 3];
+    const elements = positions.map((position, index) => ({
+      id: index + 1, web_name: `Player ${index + 1}`, element_type: position, team: 1
+    }));
+    const picks = elements.map((player, index) => ({
+      element: player.id, position: index + 1, multiplier: index < 11 ? 1 : 0,
+      is_captain: false, is_vice_captain: false
+    }));
+    const live = { elements: elements.map(player => ({
+      id: player.id, stats: { total_points: player.id === 12 ? 7 : 2, minutes: player.id === 1 ? 0 : 90 }
+    })) };
+    installUpstream({
+      bootstrap: { ...bootstrapFixture, elements, teams: [{ id: 1, short_name: 'TST' }] },
+      picks: { 101: { picks }, 202: { picks: [] } }, live,
+      fixtures: [{ team_h: 1, team_a: 2, finished: true }]
+    });
+
+    const { onRequestGet } = await loadModule();
+    const body = await (await onRequestGet(createContext())).json();
+    const squad = body.meta.managerMetrics[101].squad;
+
+    expect(squad.find(player => player.id === 12)).toMatchObject({ projectedIn: true, replaces: 1, points: 7 });
+  });
+
+  it('waits until every fixture in a double gameweek is finished', async () => {
+    const bootstrap = {
+      ...bootstrapFixture,
+      elements: bootstrapFixture.elements.map(player => ({ ...player }))
+    };
+    installUpstream({
+      bootstrap,
+      live: { elements: liveFixture.elements.map(player => ({
+        ...player,
+        stats: { ...player.stats, minutes: player.id === 22 ? 0 : 90 }
+      })) },
+      fixtures: [
+        { team_h: 1, team_a: 11, finished: true },
+        { team_h: 2, team_a: 1, finished: false }
+      ]
+    });
+
+    const { onRequestGet } = await loadModule();
+    const body = await (await onRequestGet(createContext())).json();
+
+    expect(body.meta.managerMetrics[101].squad.some(player => player.projectedIn || player.projectedOut)).toBe(false);
+  });
+
+  it('does not project a sub before the missing starter fixture has finished', async () => {
+    const bootstrap = {
+      ...bootstrapFixture,
+      elements: bootstrapFixture.elements.map(player => ({ ...player }))
+    };
+    installUpstream({
+      bootstrap,
+      live: { elements: liveFixture.elements.map(player => ({
+        ...player,
+        stats: { ...player.stats, minutes: player.id === 22 ? 0 : 90 }
+      })) },
+      fixtures: [{ team_h: 1, team_a: 11, finished: false }]
+    });
+
+    const { onRequestGet } = await loadModule();
+    const body = await (await onRequestGet(createContext())).json();
+
+    expect(body.meta.managerMetrics[101].squad.some(player => player.projectedIn || player.projectedOut)).toBe(false);
   });
 
   it('returns 502/no-store for invalid upstream JSON', async () => {
