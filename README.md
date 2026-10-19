@@ -15,7 +15,7 @@ Founded in 2008, this league has hosted 18 seasons of high-stakes FPL management
 
 ## Setup for Contributors
 
-Edit the config block in `index.html` (search for `Config`):
+Edit the reviewed configuration and archive data in `public/scripts/data.js`:
 
 | Field | Purpose |
 |--------|---------|
@@ -28,7 +28,7 @@ Edit the config block in `index.html` (search for `Config`):
 
 **Avatars:** e.g. `{ name: 'Mac Alvi', avatarUrl: 'images/avatars/mac.png' }` in `MANAGERS_EXTRA` or extend winner entries.
 
-**Screenshots:** Save PNGs in `/images/` matching each `img` path (e.g. `images/2026.png`).
+**Screenshots:** Save PNGs in `public/images/` matching each `img` path (e.g. `images/2026.png`).
 
 ## Local development and testing
 
@@ -47,7 +47,7 @@ npm run test:e2e:install
 Run the local Cloudflare Pages application:
 
 ```sh
-npx wrangler pages dev .
+npx wrangler pages dev public
 ```
 
 Run the validation commands:
@@ -80,7 +80,7 @@ on a public CORS proxy.
 Run the complete site locally with:
 
 ```sh
-npx wrangler pages dev .
+npx wrangler pages dev public
 ```
 
 Then open the URL printed by Wrangler. After authenticating Wrangler, deploy

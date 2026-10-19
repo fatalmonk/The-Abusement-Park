@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Abusement Park | Winning is everything.</title>
+  <meta name="description" content="Hall of Fame for The Abusement Park FPL mini-league — 18 seasons of winners, stats, and season archives since 2008/09.">
+  <meta property="og:title" content="The Abusement Park | Winning is everything.">
+  <meta property="og:description" content="18 seasons of suffering &amp; glory. All-time champions, filters, and season-by-season archive.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://the-abusement-park.pages.dev/">
+  <meta property="og:image" content="https://the-abusement-park.pages.dev/images/the-abusement-park-social.png">
+  <meta property="og:image:alt" content="The Abusement Park">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Abusement Park | Winning is everything.">
+  <meta name="twitter:description" content="18 seasons of suffering &amp; glory. All-time champions, filters, and season-by-season archive.">
+  <meta name="twitter:image" content="https://the-abusement-park.pages.dev/images/the-abusement-park-social.png">
+  <link rel="icon" href="images/fpllogo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <link rel="stylesheet" href="styles/app.css">
+  <script type="application/ld+json" id="json-ld"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">The Abusement Park</h1>
+      <p class="subtitle">18 seasons of abuse, banter &amp; glory</p>
+    </header>
+
+    <div class="stats-bar" id="stats-bar" aria-label="League statistics"></div>
+
+    <section class="live-section" id="live-widget-section" aria-label="Current Season Live Standings">
+      <div class="section-header">
+        <h2 class="section-label">🔴 The Abusement Park 26/27 IS LIVE</h2>
+        <div class="section-line"></div>
+        <p class="live-deadline" id="live-deadline" hidden></p>
+      </div>
+      <div id="live-widget-content">
+        <div class="empty-note">Fetching live data from FPL HQ...</div>
+      </div>
+    </section>
+
+    <div class="filter-sticky-wrap" id="filter-sticky">
+      <div class="filter-bar" role="tablist" aria-label="Filter standings">
+        <button type="button" id="tab-all" class="filter-btn active" data-mode="all" role="tab" aria-controls="standings-panel" aria-selected="true">All Time</button>
+        <button type="button" id="tab-last5" class="filter-btn" data-mode="last5" role="tab" aria-controls="standings-panel" aria-selected="false">Last 5</button>
+        <button type="button" id="tab-last10" class="filter-btn" data-mode="last10" role="tab" aria-controls="standings-panel" aria-selected="false">Last 10</button>
+      </div>
+    </div>
+
+    <section class="podium-section" id="podium-section" aria-label="Top three managers">
+      <div class="section-header">
+        <h2 class="section-label">The Podium</h2>
+        <div class="section-line"></div>
+      </div>
+      <div id="brag-container" class="podium-capture">
+        <div class="podium" id="podium"></div>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <button type="button" class="action-btn" id="btn-share-podium">
+          📸 Share Podium to WhatsApp
+        </button>
+      </div>
+    </section>
+
+    <section class="history-section">
+      <div class="section-header">
+        <h2 class="section-label">The Cabinet</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="history-grid" id="history"></div>
+    </section>
+
+    <section class="side-section awards-section awards-shame-section" aria-label="Fun awards">
+      <div class="section-header">
+        <h2 class="section-label">Wall of Shame</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="awards-grid" id="awards-shame"></div>
+    </section>
+
+    <div class="section-header cabinet-header">
+      <h2 class="section-label">The Champions</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="table-wrap" id="standings-panel" role="tabpanel" aria-labelledby="tab-all">
+      <div class="table-head">
+        <div class="th">#</div>
+        <div class="th">Manager</div>
+        <div class="th center">Titles</div>
+      </div>
+      <div id="standings"></div>
+    </div>
+
+    <footer class="site-footer">
+      <p class="footer-slogan">Winning is everything</p>
+      <a id="fpl-link" class="fpl-link" href="#" target="_blank" rel="noopener noreferrer" hidden>
+        <img src="images/fpllogo.png" alt="" width="20" height="20">
+        View league on FPL
+      </a>
+    </footer>
+  </div>
+
+  <div id="lightbox" class="modal" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption" hidden>
+    <button type="button" class="modal-close" id="lightbox-close" aria-label="Close">&times;</button>
+    <button type="button" class="modal-nav modal-prev" id="lightbox-prev" aria-label="Previous season">&lsaquo;</button>
+    <button type="button" class="modal-nav modal-next" id="lightbox-next" aria-label="Next season">&rsaquo;</button>
+    <div class="modal-content">
+      <p id="lightbox-title" class="sr-only">Season screenshot</p>
+      <img id="lightbox-img" src="" alt="">
+      <p id="lightbox-caption" class="modal-caption"></p>
+      <p id="lightbox-error" class="modal-error" hidden>Screenshot not available for this season yet.</p>
+    </div>
+  </div>
+
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

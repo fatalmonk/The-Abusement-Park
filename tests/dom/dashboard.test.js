@@ -3,7 +3,7 @@ import { JSDOM } from 'jsdom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { loadHistoricalApp } from '../helpers/load-historical-app.js';
 
-const html = readFileSync(new URL('../../index.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('../../public/index.html', import.meta.url), 'utf8');
 
 function setupDom(fetchImpl = vi.fn()) {
   const dom = new JSDOM(html, { url: 'https://example.test/' });
@@ -79,6 +79,34 @@ describe('live standings DOM behavior', () => {
     container.querySelector('[data-live-toggle]').click();
     expect(container.querySelectorAll('.live-row')).toHaveLength(7);
     expect(container.querySelector('[data-live-toggle]').getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('expands a manager row into a formation with player scores', () => {
+    const { app } = setupDom();
+    const container = document.createElement('div');
+    const squad = [
+      { id: 1, name: 'Keeper', team: 'ARS', position: 1, slot: 1, points: 6, multiplier: 1 },
+      { id: 2, name: 'Defender', team: 'ARS', position: 2, slot: 2, points: 16, multiplier: 2, captain: true },
+      { id: 3, name: 'Midfielder', team: 'MCI', position: 3, slot: 6, points: 4, multiplier: 1 },
+      { id: 4, name: 'Forward', team: 'MCI', position: 4, slot: 9, points: 2, multiplier: 1 },
+      { id: 5, name: 'Benched', team: 'CHE', position: 3, slot: 12, points: 0, multiplier: 0 }
+    ];
+
+    app.renderLiveStandings(container, [{
+      entry: 100, playerName: 'Test Manager', teamName: 'Test FC', rank: 1, lastRank: 1,
+      month: 20, gameweek: 20, season: 100, squad
+    }]);
+
+    const trigger = container.querySelector('[data-squad-toggle]');
+    expect(trigger).not.toBeNull();
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(container.querySelector('.live-squad')).toBeNull();
+
+    trigger.click();
+    expect(container.querySelector('[data-squad-toggle]').getAttribute('aria-expanded')).toBe('true');
+    expect(container.querySelectorAll('.live-player')).toHaveLength(5);
+    expect(container.querySelector('.live-player-captain').textContent).toContain('16');
+    expect(container.querySelector('.live-squad-bench').textContent).toContain('Benched');
   });
 
   it('renders the characterized unavailable state after API failure', async () => {

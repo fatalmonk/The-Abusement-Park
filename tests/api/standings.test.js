@@ -3,8 +3,10 @@ import {
   bootstrapFixture,
   emptyStandingsFixture,
   jsonResponse,
+  liveFixture,
   malformedManagerStandings,
   managerHistories,
+  managerPicks,
   standingsFixture
 } from '../fixtures/fpl.js';
 
@@ -36,6 +38,8 @@ function installUpstream({
   standings = standingsFixture,
   bootstrap = bootstrapFixture,
   histories = managerHistories,
+  picks = managerPicks,
+  live = liveFixture,
   standingsResponse,
   bootstrapResponse
 } = {}) {
@@ -43,6 +47,9 @@ function installUpstream({
     const url = String(input);
     if (url.includes('/leagues-classic/')) return standingsResponse ?? jsonResponse(clone(standings));
     if (url.includes('/bootstrap-static/')) return bootstrapResponse ?? jsonResponse(clone(bootstrap));
+    if (url.includes('/event/') && url.endsWith('/live/')) return jsonResponse(clone(live));
+    const picksMatch = url.match(/\/entry\/(.+?)\/event\/(.+?)\/picks/);
+    if (picksMatch) return jsonResponse(clone(picks[picksMatch[1]] ?? { picks: [] }));
     const entry = url.match(/\/entry\/(.+?)\/history/)?.[1];
     const history = histories[entry];
     if (history instanceof Error) throw history;
@@ -93,7 +100,13 @@ describe('GET /api/standings contract', () => {
           seasons: 2,
           careerBestPct: '5%',
           careerBestSeason: '2024/25',
-          careerAvgPct: '8.8%'
+          careerAvgPct: '8.8%',
+          squad: [
+            { id: 11, name: 'Raya', team: 'ARS', position: 1, slot: 1, points: 9, multiplier: 1, captain: false, viceCaptain: false },
+            { id: 22, name: 'Saliba', team: 'ARS', position: 2, slot: 2, points: 6, multiplier: 1, captain: false, viceCaptain: true },
+            { id: 33, name: 'Saka', team: 'ARS', position: 3, slot: 3, points: 8, multiplier: 2, captain: true, viceCaptain: false },
+            { id: 44, name: 'Haaland', team: 'MCI', position: 4, slot: 12, points: 0, multiplier: 0, captain: false, viceCaptain: false }
+          ]
         },
         202: {
           month: 45,
@@ -103,7 +116,8 @@ describe('GET /api/standings contract', () => {
           seasons: 1,
           careerBestPct: '25%',
           careerBestSeason: '2024/25',
-          careerAvgPct: '25%'
+          careerAvgPct: '25%',
+          squad: []
         }
       },
       nextDeadline: {

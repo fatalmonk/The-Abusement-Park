@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "the-abusement-park",
-  "pages_build_output_dir": ".",
+  "pages_build_output_dir": "public",
   "compatibility_date": "2026-06-30"
 }
